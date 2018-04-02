@@ -152,7 +152,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         panelToolbar.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
         panelToolbar.setName("Attack Surface Detector");
 
-        JButton importButton = new JButton("Import endpoints from source");
+        JButton importButton = new JButton("Import Endpoints from Source");
         viewSelectedButton = new JButton("View Selected");
         viewSelectedButton.setEnabled(false);
         JButton optionsButton = new JButton("Options");
