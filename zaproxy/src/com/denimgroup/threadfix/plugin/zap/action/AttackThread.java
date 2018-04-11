@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //     Copyright (c) 2009-2015 Denim Group, Ltd.
 //
@@ -18,9 +18,11 @@
 //     Portions created by Denim Group, Ltd. are Copyright (C)
 //     Denim Group, Ltd. All Rights Reserved.
 //
-//     Contributor(s): Denim Group, Ltd.
+//     Contributor(s):
+//              Denim Group, Ltd.
+//              Secure Decisions, a division of Applied Visions, Inc
 //
-////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 /*
  * Zed Attack Proxy (ZAP) and its related class files.
@@ -45,7 +47,6 @@ package com.denimgroup.threadfix.plugin.zap.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.httpclient.URI;
@@ -58,12 +59,9 @@ import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.model.SiteNode;
 import org.parosproxy.paros.network.HttpMessage;
 import org.parosproxy.paros.network.HttpSender;
-import org.parosproxy.paros.network.HttpStatusCode;
 import org.zaproxy.zap.extension.ascan.ExtensionActiveScan;
 import org.zaproxy.zap.extension.spider.ExtensionSpider;
-import org.zaproxy.zap.extension.threadfix.ZapPropertiesManager;
-
-import javax.swing.*;
+import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 public class AttackThread extends Thread {
     public enum Progress { NOT_STARTED, SPIDER, ASCAN, FAILED, COMPLETE, STOPPED }

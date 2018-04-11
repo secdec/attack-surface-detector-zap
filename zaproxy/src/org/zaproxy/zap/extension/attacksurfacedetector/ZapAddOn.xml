@@ -8,7 +8,7 @@
     <changes>First Version</changes>
     <dependencies/>
     <extensions>
-        <extension>org.zaproxy.zap.extension.threadfix.ThreadFixExtension</extension>
+        <extension>org.zaproxy.zap.extension.attacksurfacedetector.AttackSurfaceDetector</extension>
     </extensions>
     <ascanrules/>
     <pscanrules/>

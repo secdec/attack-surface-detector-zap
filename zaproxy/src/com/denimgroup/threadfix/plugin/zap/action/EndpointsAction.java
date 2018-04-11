@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
 //     Copyright (c) 2009-2015 Denim Group, Ltd.
 //
@@ -18,9 +18,11 @@
 //     Portions created by Denim Group, Ltd. are Copyright (C)
 //     Denim Group, Ltd. All Rights Reserved.
 //
-//     Contributor(s): Denim Group, Ltd.
+//     Contributor(s):
+//              Denim Group, Ltd.
+//              Secure Decisions, a division of Applied Visions, Inc
 //
-////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 package com.denimgroup.threadfix.plugin.zap.action;
 
@@ -28,11 +30,10 @@ import com.denimgroup.threadfix.data.entities.RouteParameter;
 import com.denimgroup.threadfix.data.enums.ParameterDataType;
 import com.denimgroup.threadfix.data.interfaces.Endpoint;
 import com.denimgroup.threadfix.plugin.zap.dialog.OptionsDialog;
-import com.denimgroup.threadfix.plugin.zap.dialog.UrlDialog;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
-import org.zaproxy.zap.extension.threadfix.ZapPropertiesManager;
+import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

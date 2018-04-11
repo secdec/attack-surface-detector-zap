@@ -1,21 +1,26 @@
-/*
- * Zed Attack Proxy (ZAP) and its related class files.
- *
- * ZAP is an HTTP/HTTPS proxy for assessing web application security.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package org.zaproxy.zap.extension.threadfix;
+////////////////////////////////////////////////////////////////////////////////////////
+//
+//     Copyright (C) 2017 Applied Visions - http://securedecisions.com
+//
+//     The contents of this file are subject to the Mozilla Public License
+//     Version 2.0 (the "License"); you may not use this file except in
+//     compliance with the License. You may obtain a copy of the License at
+//     http://www.mozilla.org/MPL/
+//
+//     Software distributed under the License is distributed on an "AS IS"
+//     basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+//     License for the specific language governing rights and limitations
+//     under the License.
+//
+//     This material is based on research sponsored by the Department of Homeland
+//     Security (DHS) Science and Technology Directorate, Cyber Security Division
+//     (DHS S&T/CSD) via contract number HHSP233201600058C.
+//
+//     Contributor(s):
+//              Secure Decisions, a division of Applied Visions, Inc
+//
+////////////////////////////////////////////////////////////////////////////////////////
+package org.zaproxy.zap.extension.attacksurfacedetector;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -33,17 +38,10 @@ import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import com.denimgroup.threadfix.plugin.zap.action.AttackThread;
 import com.denimgroup.threadfix.plugin.zap.action.LocalEndpointsAction;
 import com.denimgroup.threadfix.plugin.zap.dialog.OptionsDialog;
-import jdk.nashorn.internal.scripts.JO;
-import org.apache.log4j.Logger;
-import org.parosproxy.paros.Constant;
-import org.parosproxy.paros.control.Control;
-import org.parosproxy.paros.control.Control.Mode;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ViewDelegate;
-import org.parosproxy.paros.extension.history.HistoryFilter;
-import org.parosproxy.paros.model.HistoryReference;
 import org.parosproxy.paros.model.Model;
-import org.parosproxy.paros.network.HttpMessage;
+
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import com.denimgroup.threadfix.data.entities.RouteParameter;
@@ -51,11 +49,7 @@ import com.denimgroup.threadfix.data.interfaces.Endpoint;
 
 import static com.denimgroup.threadfix.plugin.zap.action.EndpointsAction.GENERIC_INT_SEGMENT;
 
-/**
- * This class creates the Spider AJAX Panel where the found URLs are displayed
- * It has a button to stop the crawler and another one to open the options.
- *
- */
+
 public class AttackSurfaceDetectorPanel extends AbstractPanel{
     private static final long serialVersionUID = 1L;
 
@@ -70,7 +64,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
     private JButton viewSelectedButton;
     private Model model;
     private AttackThread attackThread = null;
-    //List<String> nodes = new ArrayList<>();
     Map<String, String> nodes = new HashMap<String, String>();
 
     /**
@@ -116,10 +109,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         ZapPropertiesManager.INSTANCE.setEndpointsTable(endPointsTable);
 
         JScrollPane scrollPane = new JScrollPane(endPointsTable);
-
-
-        //maybe add table to a panel and then add panel to scrollPane?
-
 
         gridBagConstraints2.gridx = 0;
         gridBagConstraints2.gridy = 1;

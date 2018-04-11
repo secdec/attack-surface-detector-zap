@@ -25,21 +25,21 @@
     <fileSets>
         <fileSet>
             <outputDirectory>/</outputDirectory>
-            <directory>src/org/zaproxy/zap/extension/threadfix</directory>
+            <directory>src/org/zaproxy/zap/extension/attacksurfacedetector</directory>
             <includes>
                 <include>ZapAddOn.xml</include>
             </includes>
         </fileSet>
         <fileSet>
-            <outputDirectory>org/zaproxy/zap/extension/threadfix/</outputDirectory>
-            <directory>src/org/zaproxy/zap/extension/threadfix</directory>
+            <outputDirectory>org/zaproxy/zap/extension/attacksurfacedetector/</outputDirectory>
+            <directory>src/org/zaproxy/zap/extension/attacksurfacedetector</directory>
             <includes>
                 <include>Messages*</include>
             </includes>
         </fileSet>
         <fileSet>
-            <outputDirectory>org/zaproxy/zap/extension/threadfix/resources/</outputDirectory>
-            <directory>src/org/zaproxy/zap/extension/threadfix/resources</directory>
+            <outputDirectory>org/zaproxy/zap/extension/attacksurfacedetector/resources/</outputDirectory>
+            <directory>src/org/zaproxy/zap/extension/attacksurfacedetector/resources</directory>
         </fileSet>
     </fileSets>
 </assembly>
