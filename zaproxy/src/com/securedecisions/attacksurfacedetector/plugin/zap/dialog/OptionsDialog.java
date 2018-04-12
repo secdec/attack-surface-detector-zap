@@ -20,7 +20,7 @@
 //              Secure Decisions, a division of Applied Visions, Inc
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-package com.denimgroup.threadfix.plugin.zap.dialog;
+package com.securedecisions.attacksurfacedetector.plugin.zap.dialog;
 
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;

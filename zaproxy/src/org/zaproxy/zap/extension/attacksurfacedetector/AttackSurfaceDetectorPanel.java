@@ -35,9 +35,9 @@ import com.denimgroup.threadfix.data.enums.ParameterDataType;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabase;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabaseFactory;
 import com.denimgroup.threadfix.framework.util.EndpointUtil;
-import com.denimgroup.threadfix.plugin.zap.action.AttackThread;
-import com.denimgroup.threadfix.plugin.zap.action.LocalEndpointsAction;
-import com.denimgroup.threadfix.plugin.zap.dialog.OptionsDialog;
+import com.securedecisions.attacksurfacedetector.plugin.zap.action.AttackThread;
+import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
+import com.securedecisions.attacksurfacedetector.plugin.zap.dialog.OptionsDialog;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
@@ -47,7 +47,7 @@ import javax.swing.table.TableColumn;
 import com.denimgroup.threadfix.data.entities.RouteParameter;
 import com.denimgroup.threadfix.data.interfaces.Endpoint;
 
-import static com.denimgroup.threadfix.plugin.zap.action.EndpointsAction.GENERIC_INT_SEGMENT;
+import static com.securedecisions.attacksurfacedetector.plugin.zap.action.EndpointsAction.GENERIC_INT_SEGMENT;
 
 
 public class AttackSurfaceDetectorPanel extends AbstractPanel{

@@ -24,7 +24,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-package com.denimgroup.threadfix.plugin.zap.action;
+package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 
 import com.denimgroup.threadfix.data.interfaces.Endpoint;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabase;
