@@ -35,7 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ThreadFixExtension extends ExtensionAdaptor {
+public class AttackSurfaceDetector extends ExtensionAdaptor {
 
     private LocalEndpointsAction localEndpointsAction = null;
     private ResourceBundle messages = null;
@@ -43,10 +43,10 @@ public class ThreadFixExtension extends ExtensionAdaptor {
     JTabbedPane tabbedPane;
     JCheckBox autoSpiderField;
 
-    private static final Logger logger = Logger.getLogger(ThreadFixExtension.class);
+    private static final Logger logger = Logger.getLogger(AttackSurfaceDetector.class);
 
     static {
-       logger.info("Loading Class");
+        logger.info("Loading Class");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ThreadFixExtension extends ExtensionAdaptor {
     /**
      *
      */
-    public ThreadFixExtension() {
+    public AttackSurfaceDetector() {
         super();
         logger.info("calling constructor");
         initialize();
@@ -68,7 +68,7 @@ public class ThreadFixExtension extends ExtensionAdaptor {
     /**
      * @param name
      */
-    public ThreadFixExtension(String name) {
+    public AttackSurfaceDetector(String name) {
         super(name);
         logger.info("1-arg Constructor");
     }
@@ -78,14 +78,14 @@ public class ThreadFixExtension extends ExtensionAdaptor {
      *
      */
     private void initialize() {
-       logger.info("Initialize");
+        logger.info("Initialize");
         this.setName("Attack Surface Detector");
         // Load extension specific language files - these are held in the extension jar
     }
 
     @Override
     public void hook(ExtensionHook extensionHook) {
-       logger.info("Hook");
+        logger.info("Hook");
         super.hook(extensionHook);
 
         if (getView() != null) {
@@ -93,7 +93,6 @@ public class ThreadFixExtension extends ExtensionAdaptor {
             // Use one of the other methods to add to a different menu list
             extensionHook.getHookMenu().addToolsMenuItem(getLocalEndpointsAction());
             extensionHook.getHookView().addStatusPanel(new AttackSurfaceDetectorPanel(getView(), getModel()));
-
         }
 
 

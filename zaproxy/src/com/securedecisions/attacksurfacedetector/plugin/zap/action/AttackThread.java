@@ -89,7 +89,6 @@ public class AttackThread extends Thread {
     @Override
     public void run() {
         stopAttack = false;
-        JOptionPane.showMessageDialog(view.getMainFrame(), "THIS IS A TESSSTTTTT");
         try {
             SiteNode startNode = accessNode(this.url, "get");
             String urlString = url.toString();
