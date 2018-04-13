@@ -22,7 +22,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package com.denimgroup.threadfix.plugin.zap.action;
+package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 
 import com.denimgroup.threadfix.data.interfaces.Endpoint;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabase;
@@ -31,7 +31,7 @@ import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
-import org.zaproxy.zap.extension.threadfix.ZapPropertiesManager;
+import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import java.util.List;
 

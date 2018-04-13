@@ -22,7 +22,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package com.denimgroup.threadfix.plugin.zap.dialog;
+package com.securedecisions.attacksurfacedetector.plugin.zap.dialog;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

@@ -41,11 +41,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.denimgroup.threadfix.plugin.zap.action;
+package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.httpclient.URI;
@@ -58,10 +57,9 @@ import org.parosproxy.paros.model.Model;
 import org.parosproxy.paros.model.SiteNode;
 import org.parosproxy.paros.network.HttpMessage;
 import org.parosproxy.paros.network.HttpSender;
-import org.parosproxy.paros.network.HttpStatusCode;
 import org.zaproxy.zap.extension.ascan.ExtensionActiveScan;
 import org.zaproxy.zap.extension.spider.ExtensionSpider;
-import org.zaproxy.zap.extension.threadfix.ZapPropertiesManager;
+import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import javax.swing.*;
 
@@ -91,6 +89,7 @@ public class AttackThread extends Thread {
     @Override
     public void run() {
         stopAttack = false;
+        JOptionPane.showMessageDialog(view.getMainFrame(), "THIS IS A TESSSTTTTT");
         try {
             SiteNode startNode = accessNode(this.url, "get");
             String urlString = url.toString();

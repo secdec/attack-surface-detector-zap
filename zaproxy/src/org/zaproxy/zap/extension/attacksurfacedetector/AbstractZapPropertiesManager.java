@@ -22,7 +22,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package org.zaproxy.zap.extension.threadfix;
+package org.zaproxy.zap.extension.attacksurfacedetector;
 
 import com.denimgroup.threadfix.properties.PropertiesManager;
 

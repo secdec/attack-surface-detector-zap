@@ -22,11 +22,11 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package com.denimgroup.threadfix.plugin.zap.dialog;
+package com.securedecisions.attacksurfacedetector.plugin.zap.dialog;
 
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
-import org.zaproxy.zap.extension.threadfix.ZapPropertiesManager;
+import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import javax.swing.*;
 import java.awt.*;

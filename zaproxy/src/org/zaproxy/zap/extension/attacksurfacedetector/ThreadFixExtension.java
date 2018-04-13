@@ -22,18 +22,15 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package org.zaproxy.zap.extension.threadfix;
+package org.zaproxy.zap.extension.attacksurfacedetector;
 
-import com.denimgroup.threadfix.plugin.zap.action.LocalEndpointsAction;
+import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ExtensionAdaptor;
 import org.parosproxy.paros.extension.ExtensionHook;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;

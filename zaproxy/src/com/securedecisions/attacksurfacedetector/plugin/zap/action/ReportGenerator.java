@@ -22,7 +22,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package com.denimgroup.threadfix.plugin.zap.action;
+package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.Constant;
