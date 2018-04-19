@@ -342,7 +342,7 @@
         <dependency>
             <groupId>com.github.secdec.astam-correlator</groupId>
             <artifactId>threadfix-ham</artifactId>
-            <version>1.2.2</version>
+            <version>1.2.9</version>
         </dependency>
         <dependency>
             <groupId>org.owasp</groupId>
@@ -355,7 +355,7 @@
     <properties>
         <zap.extension.name>attacksurfacedetector</zap.extension.name>
         <zap.extension.type>release</zap.extension.type>
-        <zap.extension.version>1.01</zap.extension.version>
+        <zap.extension.version>1.02</zap.extension.version>
         <zap.extension.fullname>${zap.extension.name}-${zap.extension.type}-${zap.extension.version}</zap.extension.fullname>
 
         <db.name>stonemill</db.name>

@@ -49,7 +49,7 @@ public class OptionsDialog {
         logger.info("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
-        final JLabel sourceFolderLabel = new JLabel("Source Code Folder:");
+        final JLabel sourceFolderLabel = new JLabel("Source code:");
         final JTextField sourceFolderField = new JTextField(40);
         sourceFolderField.setText(ZapPropertiesManager.INSTANCE.getSourceFolder());
         final JButton browseButton = new JButton("Browse");
@@ -62,8 +62,8 @@ public class OptionsDialog {
                     currentDirectory = System.getProperty("user.home");
                 }
                 chooser.setCurrentDirectory(new java.io.File(currentDirectory));
-                chooser.setDialogTitle("Select A Source Code Folder");
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.setDialogTitle("Select a folder or zip file");
+                chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.setAcceptAllFileFilterUsed(false);
                 if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
                     sourceFolderField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -300,7 +300,7 @@ public class OptionsDialog {
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
         final JLabel warningLabel = new JLabel("URL configuration is required to populate the site map with the detected endpoints");
-        final JLabel sourceFolderLabel = new JLabel("Source Code Folder:");
+        final JLabel sourceFolderLabel = new JLabel("Source code:");
         final JTextField sourceFolderField = new JTextField(40);
         sourceFolderField.setText(ZapPropertiesManager.INSTANCE.getSourceFolder());
         final JButton browseButton = new JButton("Browse");
@@ -313,8 +313,8 @@ public class OptionsDialog {
                     currentDirectory = System.getProperty("user.home");
                 }
                 chooser.setCurrentDirectory(new java.io.File(currentDirectory));
-                chooser.setDialogTitle("Select A Source Code Folder");
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.setDialogTitle("Select a folder or zip file");
+                chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.setAcceptAllFileFilterUsed(false);
                 if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
                     sourceFolderField.setText(chooser.getSelectedFile().getAbsolutePath());
