@@ -45,11 +45,8 @@ import javax.swing.*;
 public class ZapPropertiesManager extends AbstractZapPropertiesManager {
 
     private static final Logger logger = Logger.getLogger(ZapPropertiesManager.class);
-
     public static final ZapPropertiesManager INSTANCE = new ZapPropertiesManager();
-
     private ZapPropertiesManager(){}
-
     private static final String
             FILE_NAME = "threadfix.properties",
             API_KEY_KEY = "key",
@@ -92,31 +89,36 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
 
     public static JTable getEndpointsTable() {return endpointsTable;}
 
-    public String getSourceFolder() {
+    public String getSourceFolder()
+    {
         String sourceFolder = getProperties().getProperty(SOURCE_FOLDER_KEY);
         logger.info("returning source code folder " + sourceFolder);
         return sourceFolder;
     }
 
-    public String getTargetHost() {
+    public String getTargetHost()
+    {
         String targetHost = getProperties().getProperty(HOST_KEY);
         logger.info("returning targetHost " + targetHost);
         return targetHost;
     }
 
-    public String getTargetPort() {
+    public String getTargetPort()
+    {
         String targetPort = getProperties().getProperty(PORT_KEY);
         logger.info("returning targetPort " + targetPort);
         return targetPort;
     }
 
-    public String getTargetPath() {
+    public String getTargetPath()
+    {
         String sourceFolder = getProperties().getProperty(PATH_KEY);
         logger.info("returning targetPath " + sourceFolder);
         return sourceFolder;
     }
 
-    public boolean getAutoSpider() {
+    public boolean getAutoSpider()
+    {
         String autoSpider = getProperties().getProperty(AUTO_SPIDER_KEY);
         logger.info("returning autospider " + autoSpider);
         if (autoSpider == null)
@@ -127,7 +129,8 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
             return false;
     }
 
-    public boolean getUseHttps() {
+    public boolean getUseHttps()
+    {
         String useHttps = getProperties().getProperty(HTTPS_KEY);
         logger.info("returning useHttps " + useHttps);
         if (useHttps == null)
@@ -138,38 +141,44 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
             return false;
     }
 
-    public static void setKeyAndUrl(String newKey, String newUrl) {
+    public static void setKeyAndUrl(String newKey, String newUrl)
+    {
         Properties properties = getProperties();
         properties.setProperty(API_KEY_KEY, newKey);
         properties.setProperty(URL_KEY, newUrl);
         saveProperties(properties);
     }
 
-    public static void setAppId(String appId) {
+    public static void setAppId(String appId)
+    {
         Properties properties = getProperties();
         properties.setProperty(APP_ID_KEY, appId);
         saveProperties(properties);
     }
 
-    public static void setSourceFolder(String sourceFolder) {
+    public static void setSourceFolder(String sourceFolder)
+    {
         Properties properties = getProperties();
         properties.setProperty(SOURCE_FOLDER_KEY, sourceFolder);
         saveProperties(properties);
     }
 
-    public static void setTargetHost(String targetHost) {
+    public static void setTargetHost(String targetHost)
+    {
         Properties properties = getProperties();
         properties.setProperty(HOST_KEY, targetHost);
         saveProperties(properties);
     }
 
-    public static void setTargetPort(String targetPort) {
+    public static void setTargetPort(String targetPort)
+    {
         Properties properties = getProperties();
         properties.setProperty(PORT_KEY, targetPort);
         saveProperties(properties);
     }
 
-    public static void setTargetPath(String targetPath) {
+    public static void setTargetPath(String targetPath)
+    {
         Properties properties = getProperties();
         properties.setProperty(PATH_KEY, targetPath);
         saveProperties(properties);
@@ -194,13 +203,11 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
             properties.setProperty(AUTO_SPIDER_KEY, "false");
         saveProperties(properties);
     }
-    private static Properties getProperties() {
+    private static Properties getProperties()
+    {
         Properties properties = new Properties();
-
         File file = new File(Constant.getZapHome(), FILE_NAME);
-
         logger.info("Properties file is at " + file.getAbsolutePath());
-
         if (!file.exists()) {
             try {
                 logger.info("Creating new file.");
@@ -209,8 +216,8 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
                 logger.warn("Failed trying to initialize properties file.", e);
             }
         }
-
-        if (file.exists()) {
+        if (file.exists())
+        {
             try (FileReader reader = new FileReader(file)) {
                 properties.load(reader);
                 logger.info("Successfully loaded properties.");
@@ -220,9 +227,9 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         } else {
             logger.warn("File didn't exist");
         }
-
         return properties;
     }
+
     public String getTargetUrl()
     {
         String proto = new String();
@@ -234,25 +241,23 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         String path = getTargetPath();
         String port = getTargetPort();
         String host = getTargetHost();
-
         if(port == null || port.trim().isEmpty() || host == null || host.trim().isEmpty())
             return null;
 
-         if (path == null || path.trim().isEmpty())
-         {
+        if (path == null || path.trim().isEmpty())
              return proto + host + ":" + port;
-        }
         else
-        {
             return proto + host + ":" + port + "/" + path;
-        }
     }
-    private static void saveProperties(Properties properties) {
-        try (FileWriter writer = new FileWriter(new File(Constant.getZapHome(), FILE_NAME))) {
+    private static void saveProperties(Properties properties)
+    {
+        try (FileWriter writer = new FileWriter(new File(Constant.getZapHome(), FILE_NAME)))
+        {
             properties.store(writer, SAVE_MESSAGE);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             logger.warn(e.getMessage(), e);
         }
     }
-
 }

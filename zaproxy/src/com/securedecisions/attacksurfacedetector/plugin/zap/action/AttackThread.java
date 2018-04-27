@@ -24,25 +24,6 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-/*
- * Zed Attack Proxy (ZAP) and its related class files.
- *
- * ZAP is an HTTP/HTTPS proxy for assessing web application security.
- *
- * Copyright 2012 The ZAP development team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 
 import java.net.MalformedURLException;
@@ -89,30 +70,32 @@ public class AttackThread extends Thread {
     public void setNodes(Map<String, String> nodes) {this.nodes = nodes;}
 
     @Override
-    public void run() {
+    public void run()
+    {
         stopAttack = false;
-        try {
+        try
+        {
             SiteNode startNode = accessNode(this.url, "get");
             String urlString = url.toString();
 
             logger.info("Starting at url : " + urlString);
 
-            if (startNode == null) {
+            if (startNode == null)
+            {
                 logger.debug("Failed to access URL " + urlString);
                 if(extension != null)
                     extension.notifyProgress(Progress.FAILED);
                 return;
             }
-            if (stopAttack) {
+            if (stopAttack)
+            {
                 logger.debug("Attack stopped manually");
                 if(extension != null)
                     extension.notifyProgress(Progress.STOPPED);
                 return;
             }
             if (ZapPropertiesManager.INSTANCE.getAutoSpider())
-            {
                 spider(startNode);
-            }
             else
             {
                 for (Map.Entry<String, String> node : nodes.entrySet())
@@ -121,38 +104,33 @@ public class AttackThread extends Thread {
                     SiteNode childNode = accessNode(new URL(url + node.getKey()), node.getValue());
                     logger.info("got out of accessNode.");
                     if (childNode != null)
-                    {
                         logger.info("Child node != null, child node is " + childNode);
-                    }
                     else
-                    {
                         logger.info("child node was null.");
-                    }
                 }
             }
-            
             ExtensionActiveScan extAscan = (ExtensionActiveScan) Control.getSingleton().getExtensionLoader().getExtension(ExtensionActiveScan.NAME);
-            if (extAscan == null) {
+            if (extAscan == null)
+            {
                 logger.error("No active scanner");
                 extension.notifyProgress(Progress.FAILED);
-            } else {
+            }
+            else
+            {
                 extension.notifyProgress(Progress.ASCAN);
                 extAscan.onHttpRequestSend(startNode.getHistoryReference().getHttpMessage());
-                //extAscan.startScanNode(startNode);
-                //extAscan.start();
-
-
-
             }
-
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             logger.error(e.getMessage(), e);
             if(extension != null)
                 extension.notifyProgress(Progress.FAILED);
         }
     }
 
-    private void spider(SiteNode startNode) throws InterruptedException, MalformedURLException {
+    private void spider(SiteNode startNode) throws InterruptedException, MalformedURLException
+    {
         logger.info("About to grab spider.");
         ExtensionSpider extSpider = (ExtensionSpider) Control.getSingleton().getExtensionLoader().getExtension(ExtensionSpider.NAME);
         logger.info("Starting spider.");
@@ -161,12 +139,16 @@ public class AttackThread extends Thread {
             if(extension != null)
                 extension.notifyProgress(Progress.FAILED);
             return;
-        } else if (startNode == null) {
+        }
+        else if (startNode == null)
+        {
             logger.error("start node was null");
             if(extension != null)
                 extension.notifyProgress(Progress.FAILED);
             return;
-        } else {
+        }
+        else
+        {
             logger.info("Starting spider.");
             if(extension != null)
                 extension.notifyProgress(Progress.SPIDER);
@@ -189,11 +171,10 @@ public class AttackThread extends Thread {
             extSpider.startScanNode(startNode);
             logger.info("Started the extension.");
         }
-
         // Give some time to the spider to finish to setup and start itself.
         sleep(1500);
-
-        try {
+        try
+        {
             // Wait for the spider to complete
             while (extSpider.isScanning(startNode, true)) {
                 sleep (500);
@@ -202,10 +183,10 @@ public class AttackThread extends Thread {
                     break;
                 }
             }
-        } catch (InterruptedException e) {
-            // Ignore
         }
-        if (stopAttack) {
+        catch (InterruptedException e) {/* Ignore*/}
+        if (stopAttack)
+        {
             logger.debug("Attack stopped manually");
             if(extension != null)
                 extension.notifyProgress(Progress.STOPPED);
@@ -214,17 +195,17 @@ public class AttackThread extends Thread {
 
         // Pause before the spider seems to help
         sleep(2000);
-
-        if (stopAttack) {
+        if (stopAttack)
+        {
             logger.debug("Attack stopped manually");
             if(extension != null)
                 extension.notifyProgress(Progress.STOPPED);
         }
     }
 
-    private SiteNode accessNode(URL url, String method) {
+    private SiteNode accessNode(URL url, String method)
+    {
         logger.info("Trying to find a node for " + url);
-
         SiteNode startNode = null;
         // Request the URL
         try {
@@ -245,30 +226,33 @@ public class AttackThread extends Thread {
                 extHistory.addHistory(msg, HistoryReference.TYPE_MANUAL);
                 Model.getSingleton().getSession().getSiteTree().addPath(msg.getHistoryRef());
             }
-
-            for (int i=0; i < 10; i++) {
+            for (int i=0; i < 10; i++)
+            {
                 startNode = Model.getSingleton().getSession().getSiteTree().findNode(new URI(url.toString(), false));
-                if (startNode != null) {
+                if (startNode != null)
+                {
                     break;
                 }
-                try {
+                try
+                {
                     sleep (200);
-                } catch (InterruptedException e) {
-                    // Ignore
                 }
+                catch (InterruptedException e) {/*ignore*/}
             }
-        } catch (Exception e1) {
+        }
+        catch (Exception e1)
+        {
             logger.info(e1.getMessage(), e1);
             return null;
         }
-
         logger.warn("returning " + startNode);
         return startNode;
     }
 
-
-    private HttpSender getHttpSender() {
-        if (httpSender == null) {
+    private HttpSender getHttpSender()
+    {
+        if (httpSender == null)
+        {
             httpSender = new HttpSender(Model.getSingleton().getOptionsParam().getConnectionParam(), true,
                     HttpSender.MANUAL_REQUEST_INITIATOR);
         }

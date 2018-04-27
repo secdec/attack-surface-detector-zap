@@ -42,136 +42,123 @@ import java.net.URL;
 import java.util.*;
 
 public abstract class EndpointsAction extends JMenuItem {
-
 	public static final String GENERIC_INT_SEGMENT = "\\{id\\}";
-
     private AttackThread attackThread = null;
-
     Map<String, String> nodes = new HashMap<String, String>();
 
-    public EndpointsAction(final ViewDelegate view, final Model model) {
+    public EndpointsAction(final ViewDelegate view, final Model model)
+    {
         getLogger().info("Initializing Attack Surface Detector menu item: \"" + getMenuItemText() + "\"");
         setText(getMenuItemText());
-
         addActionListener(new java.awt.event.ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-
+            public void actionPerformed(java.awt.event.ActionEvent e)
+            {
                 getLogger().info("About to show dialog.");
-                
                 boolean configured = OptionsDialog.Validate(view);
                 boolean completed = false;
-                
-                if (configured) {
+
+                if (configured)
+                {
                     getLogger().info("configured");Endpoint.Info[] endpoints = getEndpoints();
 
-                    if ((endpoints == null) || (endpoints.length == 0)) {
+                    if ((endpoints == null) || (endpoints.length == 0))
 	                	view.showWarningDialog(getNoEndpointsMessage());
-	                } else {
+	                else
+	                {
                         fillEndpointsToTable(endpoints);
                         getLogger().info("Got " + endpoints.length + " endpoints.");
 
                         buildNodesFromEndpoints(endpoints, view);
 
 		                String url = ZapPropertiesManager.INSTANCE.getTargetUrl();
-                        if (url != null) { // cancel not pressed
+                        if (url != null)
+                        { // cancel not pressed
                             completed = attackUrl(url, view);
-                            if (!completed) {
+                            if (!completed)
                                 view.showWarningDialog("Invalid URL.");
-                            }
                         }
                         else
-                        {
                             view.showMessageDialog(getCompletedMessage());
-                        }
 	                }
                 }
-                if (completed) {
+                if (completed)
+                {
                 	view.showMessageDialog(getCompletedMessage());
                 }
             }
         });
     }
 
-    public void buildNodesFromEndpoints(Endpoint.Info[] endpoints , final ViewDelegate view) {
+    public void buildNodesFromEndpoints(Endpoint.Info[] endpoints , final ViewDelegate view)
+    {
         for (Endpoint.Info endpoint : endpoints)
         {
                 String endpointPath = endpoint.getUrlPath();
                 if (endpointPath.startsWith("/"))
-                {
                     endpointPath = endpointPath.substring(1);
-                }
                 endpointPath = endpointPath.replaceAll(GENERIC_INT_SEGMENT, "1");
-
                 boolean first = true;
                 String reqString = endpointPath;
                 String method = endpoint.getHttpMethod();
-                    for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+                for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+                {
+                    if (first)
                     {
-                        if (first)
-                        {
-                            first = false;
-                            reqString = reqString + "?";
-                        }
-                        else
-                        {
-                            reqString = reqString + "&";
-                        }
-
-                        if (parameter.getValue().getDataType() == ParameterDataType.STRING)
-                        {
-                            reqString = reqString + parameter.getKey() + "="+"debug";
-                        }
-
-                        else if (parameter.getValue().getDataType() == ParameterDataType.INTEGER)
-                        {
-                            reqString = reqString + parameter.getKey() + "="+"-1";
-                        }
-
-                        else if (parameter.getValue().getDataType() == ParameterDataType.BOOLEAN)
-                        {
-                            reqString = reqString + parameter.getKey() + "="+"true";
-                        }
-                        else if (parameter.getValue().getDataType() == ParameterDataType.DECIMAL)
-                        {
-                            reqString = reqString + parameter.getKey() + "="+".1";
-                        }
-                        else if (parameter.getValue().getDataType() == ParameterDataType.DATE_TIME)
-                        {
-                            reqString = reqString + parameter.getKey() + "="+ new Date();
-                        }
-                        else if (parameter.getValue().getDataType() == ParameterDataType.LOCAL_DATE)
-                        {
-                            reqString = reqString + parameter.getKey() + "="+new Date();
-                        }
-                        else
-                        {
-                            reqString = reqString + parameter.getKey() + "=default";
-                        }
+                        first = false;
+                        reqString = reqString + "?";
                     }
-                    reqString = reqString.replace("{", "");
-                    reqString = reqString.replace("}", "");
-                    reqString = reqString.replace(" ", "");
-                    nodes.put(reqString, method);
+                    else
+                        reqString = reqString + "&";
+
+                    if (parameter.getValue().getDataType() == ParameterDataType.STRING)
+                        reqString = reqString + parameter.getKey() + "="+"debug";
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.INTEGER)
+                        reqString = reqString + parameter.getKey() + "="+"-1";
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.BOOLEAN)
+                        reqString = reqString + parameter.getKey() + "="+"true";
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.DECIMAL)
+                        reqString = reqString + parameter.getKey() + "="+".1";
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.DATE_TIME)
+                        reqString = reqString + parameter.getKey() + "="+ new Date();
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.LOCAL_DATE)
+                        reqString = reqString + parameter.getKey() + "="+new Date();
+
+                    else
+                        reqString = reqString + parameter.getKey() + "=default";
+
+                }
+                reqString = reqString.replace("{", "");
+                reqString = reqString.replace("}", "");
+                reqString = reqString.replace(" ", "");
+                nodes.put(reqString, method);
         }
     }
 
-    public boolean attackUrl(String url,  ViewDelegate view) {
-        try {
-            if(!url.substring(url.length()-1).equals("/")){
+    public boolean attackUrl(String url,  ViewDelegate view)
+    {
+        try
+        {
+            if(!url.substring(url.length()-1).equals("/"))
                 url = url+"/";
-            }
             attack(new URL(url), view);
             return true;
-        } catch (MalformedURLException e1) {
+        }
+        catch (MalformedURLException e1)
+        {
             getLogger().warn("Bad URL format.");
             return false;
         }
     }
 
-    private void attack (URL url,  ViewDelegate view) {
+    private void attack (URL url,  ViewDelegate view)
+    {
         getLogger().info("Starting url " + url);
-
         if (attackThread != null && attackThread.isAlive()) {
             return;
         }
@@ -179,7 +166,6 @@ public abstract class EndpointsAction extends JMenuItem {
         attackThread.setNodes(nodes);
         attackThread.setURL(url);
         attackThread.start();
-
     }
 
     private void fillEndpointsToTable(Endpoint.Info[] endpoints)
@@ -187,10 +173,10 @@ public abstract class EndpointsAction extends JMenuItem {
         int count = 0;
         JTable endpointTable = ZapPropertiesManager.INSTANCE.getEndpointsTable();
         DefaultTableModel dtm = (DefaultTableModel)endpointTable.getModel();
+
         while(dtm.getRowCount() > 0)
-        {
             dtm.removeRow(0);
-        }
+
         for (Endpoint.Info endpoint : endpoints)
         {
             boolean hasGet = false;
@@ -210,22 +196,18 @@ public abstract class EndpointsAction extends JMenuItem {
                     });
             count++;
         }
+    }
 
+    public void notifyProgress(AttackThread.Progress progress)
+    {
+        getLogger().info("Status is " + progress);
     }
 
     protected abstract String getMenuItemText();
-
     protected abstract String getNoEndpointsMessage();
-
     protected abstract String getCompletedMessage();
-
-
     protected abstract Logger getLogger();
-
     public abstract Endpoint.Info[] getEndpoints();
 
-    public void notifyProgress(AttackThread.Progress progress) {
-        getLogger().info("Status is " + progress);
-    }
 
 }

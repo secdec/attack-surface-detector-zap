@@ -38,28 +38,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AttackSurfaceDetector extends ExtensionAdaptor {
-
     private LocalEndpointsAction localEndpointsAction = null;
     private ResourceBundle messages = null;
     private AbstractPanel statusPanel;
     JTabbedPane tabbedPane;
     JCheckBox autoSpiderField;
-
     private static final Logger logger = Logger.getLogger(AttackSurfaceDetector.class);
+    static { logger.info("Loading Class"); }
 
-    static {
-        logger.info("Loading Class");
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    /**
-     *
-     */
-    public AttackSurfaceDetector() {
+    public AttackSurfaceDetector()
+    {
         super();
         logger.info("calling constructor");
         initialize();
@@ -67,22 +55,16 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
         this.setEnabled(true);
     }
 
-    /**
-     * @param name
-     */
-    public AttackSurfaceDetector(String name) {
+    public AttackSurfaceDetector(String name)
+    {
         super(name);
         logger.info("1-arg Constructor");
     }
 
-    /**
-     * This method initializes this
-     *
-     */
-    private void initialize() {
+    private void initialize()
+    {
         logger.info("Initialize");
         this.setName("Attack Surface Detector");
-        // Load extension specific language files - these are held in the extension jar
     }
 
     @Override
@@ -90,47 +72,54 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     {
         logger.info("Hook");
         super.hook(extensionHook);
-
-        if (getView() != null) {
-            // Register our top menu item, as long as we're not running as a daemon
-            // Use one of the other methods to add to a different menu list
+        if (getView() != null)
+        {
             extensionHook.getHookMenu().addToolsMenuItem(getLocalEndpointsAction());
             extensionHook.getHookView().addStatusPanel(new AttackSurfaceDetectorPanel(getView(), getModel()));
         }
-
-
     }
 
-    public LocalEndpointsAction getLocalEndpointsAction() {
+    public LocalEndpointsAction getLocalEndpointsAction()
+    {
         logger.info("Getting menu");
-        if (localEndpointsAction == null) {
+        if (localEndpointsAction == null)
             localEndpointsAction = new LocalEndpointsAction(getView(), getModel());
-        }
+
         return localEndpointsAction;
     }
 
-    public String getMessageString(String key) {
-        return messages.getString(key);
-    }
+    public String getMessageString(String key) { return messages.getString(key); }
+
     @Override
-    public String getAuthor() {
+    public String getAuthor()
+    {
         logger.info("Getting Author");
         return "Secure Decisons";
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription()
+    {
         logger.info("Getting Description");
         return "Source Code Analysis";
     }
 
     @Override
-    public URL getURL() {
+    public URL getURL()
+    {
         logger.info("Getting URL");
-        try {
+        try
+        {
             return new URL("https://github.com/denimgroup/threadfix/wiki/Zap-Plugin");
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e)
+        {
             return null;
         }
+    }
+    @Override
+    public boolean isEnabled()
+    {
+        return true;
     }
 }

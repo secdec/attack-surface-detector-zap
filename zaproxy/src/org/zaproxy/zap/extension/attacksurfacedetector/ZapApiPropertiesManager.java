@@ -30,20 +30,18 @@ import org.apache.log4j.Logger;
 
 public class ZapApiPropertiesManager extends AbstractZapPropertiesManager {
     private static final Logger logger = Logger.getLogger(ZapApiPropertiesManager.class);
-
     private String url = null;
     private String key = null;
     private String appId = null;
-
     public ZapApiPropertiesManager() {
         this(null, null, null);
     }
-
     public ZapApiPropertiesManager(String url, String key) {
         this(url, key, null);
     }
 
-    public ZapApiPropertiesManager(String url, String key, String appId) {
+    public ZapApiPropertiesManager(String url, String key, String appId)
+    {
         this.url = url;
         this.key = key;
         this.appId = appId;

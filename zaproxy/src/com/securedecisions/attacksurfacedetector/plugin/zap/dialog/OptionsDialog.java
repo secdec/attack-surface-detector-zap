@@ -38,14 +38,15 @@ public class OptionsDialog {
     static boolean autoSpider;
 
     public static boolean Validate(final ViewDelegate view)
-   {
+    {
        if (ZapPropertiesManager.INSTANCE.getTargetUrl() != null && !(ZapPropertiesManager.INSTANCE.getSourceFolder() == null || ZapPropertiesManager.INSTANCE.getSourceFolder().isEmpty()))
           return true;
        else
             return showNotConfig(view);
-   }
+    }
 
-    public static boolean show(final ViewDelegate view) {
+   public static boolean show(final ViewDelegate view)
+   {
         logger.info("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
@@ -53,9 +54,11 @@ public class OptionsDialog {
         final JTextField sourceFolderField = new JTextField(40);
         sourceFolderField.setText(ZapPropertiesManager.INSTANCE.getSourceFolder());
         final JButton browseButton = new JButton("Browse");
-        browseButton.addActionListener(new java.awt.event.ActionListener() {
+        browseButton.addActionListener(new java.awt.event.ActionListener()
+        {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
+            public void actionPerformed(java.awt.event.ActionEvent e)
+            {
                 JFileChooser chooser = new JFileChooser();
                 String currentDirectory = sourceFolderField.getText();
                 if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
@@ -65,12 +68,10 @@ public class OptionsDialog {
                 chooser.setDialogTitle("Select a folder or zip file");
                 chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.setAcceptAllFileFilterUsed(false);
-                if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
                     sourceFolderField.setText(chooser.getSelectedFile().getAbsolutePath());
-                }
             }
         });
-
 
         JLabel hostLabel = new JLabel("Host:");
         JTextField hostField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetHost());
@@ -87,7 +88,8 @@ public class OptionsDialog {
         JCheckBox httpsField = new JCheckBox();
         httpsField.setSelected(https);
 
-        ActionListener applicationCheckBoxHttpActionListener = new ActionListener() {
+        ActionListener applicationCheckBoxHttpActionListener = new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e) {
                 https = httpsField.isSelected();
@@ -95,21 +97,17 @@ public class OptionsDialog {
         };
 
         httpsField.addActionListener(applicationCheckBoxHttpActionListener);
-
-
         JLabel autoSpiderLabel = new JLabel("Automatically start spider after importing endpoints: ");
         JCheckBox autoSpiderField = new JCheckBox();
         autoSpiderField.setSelected(autoSpider);
-
-        ActionListener applicationCheckBoxSpiderActionListener = new ActionListener() {
+        ActionListener applicationCheckBoxSpiderActionListener = new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e) {
                 autoSpider = autoSpiderField.isSelected();
             }
         };
-
         autoSpiderField.addActionListener(applicationCheckBoxSpiderActionListener);
-
 
         GridBagLayout experimentLayout = new GridBagLayout();
         GridBagConstraints labelConstraints = new GridBagConstraints();
@@ -139,8 +137,6 @@ public class OptionsDialog {
         GridBagLayout mainLayout = new GridBagLayout();
         JPanel basePanel = new JPanel(mainLayout);
 
-
-
         GridBagLayout optionsLayout = new GridBagLayout();
         JPanel optionsPanel = new JPanel(optionsLayout);
 
@@ -151,7 +147,6 @@ public class OptionsDialog {
         labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
-
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
@@ -173,7 +168,6 @@ public class OptionsDialog {
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
 
-
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
@@ -193,7 +187,6 @@ public class OptionsDialog {
         labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
-
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
@@ -215,7 +208,6 @@ public class OptionsDialog {
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
 
-
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
@@ -228,7 +220,6 @@ public class OptionsDialog {
         optionsPanel.add(httpsLabel, labelConstraints);
         optionsPanel.add(httpsField, textBoxConstraints);
 
-
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
@@ -236,7 +227,6 @@ public class OptionsDialog {
         labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
-
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
@@ -250,16 +240,12 @@ public class OptionsDialog {
         optionsPanel.add(autoSpiderLabel, labelConstraints);
         optionsPanel.add(autoSpiderField, textBoxConstraints);
 
-
-
         GridBagConstraints panelConstraints = new GridBagConstraints();
         panelConstraints.gridwidth = 1;
         panelConstraints.gridx = 0;
         panelConstraints.gridy = 0;
         panelConstraints.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(myPanel, panelConstraints);
-
-
 
         panelConstraints = new GridBagConstraints();
         panelConstraints.gridwidth = 1;
@@ -285,17 +271,13 @@ public class OptionsDialog {
             return true;
         }
         else if(result == JOptionPane.NO_OPTION)
-        {
             return show(view);
-        }
         else
-        {
             return false;
-        }
-
     }
 
-    public static boolean showNotConfig(final ViewDelegate view) {
+    public static boolean showNotConfig(final ViewDelegate view)
+    {
         logger.info("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
@@ -304,14 +286,14 @@ public class OptionsDialog {
         final JTextField sourceFolderField = new JTextField(40);
         sourceFolderField.setText(ZapPropertiesManager.INSTANCE.getSourceFolder());
         final JButton browseButton = new JButton("Browse");
-        browseButton.addActionListener(new java.awt.event.ActionListener() {
+        browseButton.addActionListener(new java.awt.event.ActionListener()
+        {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 String currentDirectory = sourceFolderField.getText();
-                if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
+                if ((currentDirectory == null) || (currentDirectory.trim().equals("")))
                     currentDirectory = System.getProperty("user.home");
-                }
                 chooser.setCurrentDirectory(new java.io.File(currentDirectory));
                 chooser.setDialogTitle("Select a folder or zip file");
                 chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -321,7 +303,6 @@ public class OptionsDialog {
                 }
             }
         });
-
 
         JLabel hostLabel = new JLabel("Host:");
         JTextField hostField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetHost());
@@ -337,30 +318,26 @@ public class OptionsDialog {
         JLabel httpsLabel = new JLabel("Use HTTPS:");
         JCheckBox httpsField = new JCheckBox();
         httpsField.setSelected(https);
-
-        ActionListener applicationCheckBoxHttpActionListener = new ActionListener() {
+        ActionListener applicationCheckBoxHttpActionListener = new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e) {
                 https = httpsField.isSelected();
             }
         };
-
         httpsField.addActionListener(applicationCheckBoxHttpActionListener);
-
 
         JLabel autoSpiderLabel = new JLabel("Automatically start spider after importing endpoints: ");
         JCheckBox autoSpiderField = new JCheckBox();
         autoSpiderField.setSelected(autoSpider);
-
-        ActionListener applicationCheckBoxSpiderActionListener = new ActionListener() {
+        ActionListener applicationCheckBoxSpiderActionListener = new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e) {
                 autoSpider = autoSpiderField.isSelected();
             }
         };
-
         autoSpiderField.addActionListener(applicationCheckBoxSpiderActionListener);
-
 
         GridBagLayout experimentLayout = new GridBagLayout();
         GridBagConstraints labelConstraints = new GridBagConstraints();
@@ -393,7 +370,6 @@ public class OptionsDialog {
         JPanel warningPanel = new JPanel();
         warningPanel.add(warningLabel);
 
-
         GridBagLayout optionsLayout = new GridBagLayout();
         JPanel optionsPanel = new JPanel(optionsLayout);
 
@@ -404,7 +380,6 @@ public class OptionsDialog {
         labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
-
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
@@ -426,7 +401,6 @@ public class OptionsDialog {
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
 
-
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
@@ -446,7 +420,6 @@ public class OptionsDialog {
         labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
-
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
@@ -468,7 +441,6 @@ public class OptionsDialog {
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
 
-
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
@@ -481,7 +453,6 @@ public class OptionsDialog {
         optionsPanel.add(httpsLabel, labelConstraints);
         optionsPanel.add(httpsField, textBoxConstraints);
 
-
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
@@ -489,7 +460,6 @@ public class OptionsDialog {
         labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
         labelConstraints.anchor = GridBagConstraints.WEST;
-
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
@@ -503,15 +473,12 @@ public class OptionsDialog {
         optionsPanel.add(autoSpiderLabel, labelConstraints);
         optionsPanel.add(autoSpiderField, textBoxConstraints);
 
-
-
         GridBagConstraints panelConstraints = new GridBagConstraints();
         panelConstraints.gridwidth = 1;
         panelConstraints.gridx = 0;
         panelConstraints.gridy = 0;
         panelConstraints.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(warningPanel, panelConstraints);
-
 
         panelConstraints = new GridBagConstraints();
         panelConstraints.gridwidth = 1;
@@ -520,16 +487,13 @@ public class OptionsDialog {
         panelConstraints.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(myPanel, panelConstraints);
 
-
         panelConstraints = new GridBagConstraints();
         panelConstraints.gridwidth = 1;
         panelConstraints.gridx = 0;
         panelConstraints.gridy = 2;
         panelConstraints.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(optionsPanel, panelConstraints);
-
-        Object[] options1 = { "Submit", "Reset",
-                "Cancel" };
+        Object[] options1 = { "Submit", "Reset", "Cancel" };
         int result = JOptionPane.showOptionDialog(view.getMainFrame(), basePanel, "Attack Surface Detector",
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options1, null);
@@ -545,37 +509,34 @@ public class OptionsDialog {
             return true;
         }
         else if(result == JOptionPane.NO_OPTION)
-        {
             return showNotConfig(view);
-        }
         else
-        {
             return false;
-        }
-
     }
 }
 
-class PortFilter extends DocumentFilter {
+class PortFilter extends DocumentFilter
+{
     static final int maxLength = 5;
     @Override
-    public void insertString(FilterBypass fb, int offset, String string,
-                             AttributeSet attr) throws BadLocationException {
+    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException
+    {
         Document doc = fb.getDocument();
         StringBuilder sb = new StringBuilder();
         sb.append(doc.getText(0, doc.getLength()));
         sb.insert(offset, string);
         int val = Integer.parseInt(sb.toString());
 
-        if (test(sb.toString()) && sb.length() <= maxLength && val <= 65535) {
+        if (isInteger(sb.toString()) && sb.length() <= maxLength && val <= 65535)
             super.insertString(fb, offset, string, attr);
-        } else {
+         else
             Toolkit.getDefaultToolkit().beep();
-        }
     }
 
-    private boolean test(String text) {
-        try {
+    private boolean isInteger(String text)
+    {
+        try
+        {
             Integer.parseInt(text);
             return true;
         } catch (NumberFormatException e) {
@@ -584,36 +545,28 @@ class PortFilter extends DocumentFilter {
     }
 
     @Override
-    public void replace(FilterBypass fb, int offset, int length, String text,
-                        AttributeSet attrs) throws BadLocationException {
-
+    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException
+    {
         Document doc = fb.getDocument();
         StringBuilder sb = new StringBuilder();
         sb.append(doc.getText(0, doc.getLength()));
         sb.replace(offset, offset + length, text);
         int val = Integer.parseInt(sb.toString());
-
-        if (test(sb.toString()) && (sb.length() <= maxLength) && val <= 65535) {
+        if (isInteger(sb.toString()) && (sb.length() <= maxLength) && val <= 65535)
             super.replace(fb, offset, length, text, attrs);
-        } else {
+        else
             Toolkit.getDefaultToolkit().beep();
-        }
-
     }
-
     @Override
-    public void remove(FilterBypass fb, int offset, int length)
-            throws BadLocationException {
+    public void remove(FilterBypass fb, int offset, int length) throws BadLocationException
+    {
         Document doc = fb.getDocument();
         StringBuilder sb = new StringBuilder();
         sb.append(doc.getText(0, doc.getLength()));
         sb.delete(offset, offset + length);
-
-        if ((test(sb.toString()) && (sb.length() <= maxLength)) || (sb.length() == 0)) {
+        if ((isInteger(sb.toString()) && (sb.length() <= maxLength)) || (sb.length() == 0))
             super.remove(fb, offset, length);
-        } else {
+        else
             Toolkit.getDefaultToolkit().beep();
-        }
-
     }
 }

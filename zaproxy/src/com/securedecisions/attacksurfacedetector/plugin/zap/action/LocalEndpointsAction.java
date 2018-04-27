@@ -40,54 +40,45 @@ import java.util.List;
 public class LocalEndpointsAction extends EndpointsAction {
 
 	private static final long serialVersionUID = 1L;
-
 	private static final Logger LOGGER = Logger.getLogger(LocalEndpointsAction.class);
-
     public LocalEndpointsAction(final ViewDelegate view, final Model model) {
         super(view, model);
     }
-
     @Override
     protected String getMenuItemText() {
         return "Attack Surface Detector: Import Endpoints from Source";
     }
-
     @Override
-    protected String getNoEndpointsMessage() {
-        return "Failed to retrieve endpoints from the source. Check your inputs.";
-    }
-
+    protected String getNoEndpointsMessage() { return "Failed to retrieve endpoints from the source. Check your inputs."; }
     @Override
     protected String getCompletedMessage() {
         return "The endpoints were successfully generated from source.";
     }
-
     protected Logger getLogger() {
         return LOGGER;
     }
-
     @Override
     public Endpoint.Info[] getEndpoints() {
         return getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
     }
 
-    public Endpoint.Info[] getEndpoints(String sourceFolder) {
+    public Endpoint.Info[] getEndpoints(String sourceFolder)
+    {
         getLogger().info("Got source information, about to generate endpoints.");
         if (sourceFolder== null || sourceFolder.trim().isEmpty())
             return  null;
 
         EndpointDatabase endpointDatabase = EndpointDatabaseFactory.getDatabase(sourceFolder);
         Endpoint.Info[] endpoints = null;
-        if (endpointDatabase != null) {
+        if (endpointDatabase != null)
+        {
             List<Endpoint> endpointList = endpointDatabase.generateEndpoints();
             endpointList = EndpointUtil.flattenWithVariants(endpointList);
             endpoints = new Endpoint.Info[endpointList.size()];
             int i = 0;
-            for (Endpoint endpoint : endpointList) {
+            for (Endpoint endpoint : endpointList)
                 endpoints[i++] = Endpoint.Info.fromEndpoint(endpoint);
-            }
         }
-
         return endpoints;
     }
 }

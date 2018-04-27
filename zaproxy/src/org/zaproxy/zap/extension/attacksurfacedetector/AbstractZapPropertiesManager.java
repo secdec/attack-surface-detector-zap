@@ -25,9 +25,6 @@
 //////////////////////////////////////////////////////////////////////////
 
 package org.zaproxy.zap.extension.attacksurfacedetector;
-
 import com.denimgroup.threadfix.properties.PropertiesManager;
 
-public abstract class AbstractZapPropertiesManager extends PropertiesManager {
-    public abstract String getAppId();
-}
+public abstract class AbstractZapPropertiesManager extends PropertiesManager { public abstract String getAppId();}
