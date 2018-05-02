@@ -1,19 +1,20 @@
 <zapaddon>
     <name>Attack Surface Detector</name>
     <version>1</version>
-    <semver/>
+    <semver>1.1.0</semver>
+    <file>attacksurfacedetector-release-1.10.zap</file>
+    <status>alpha</status>
     <description>Source Code Analysis</description>
     <author>Secure Decisions (Matthew DeLetto)</author>
-    <url/>
+    <url></url>
     <changes>First Version</changes>
-    <dependencies/>
     <extensions>
         <extension>org.zaproxy.zap.extension.attacksurfacedetector.AttackSurfaceDetector</extension>
     </extensions>
     <ascanrules/>
     <pscanrules/>
     <filters/>
-    <files/>
+    <files></files>
     <not-before-version>2.4.0</not-before-version>
-    <not-from-version/>
+    <not-from-version></not-from-version>
 </zapaddon>

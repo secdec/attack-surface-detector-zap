@@ -50,7 +50,7 @@ public class OptionsDialog {
         logger.info("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
-        final JLabel sourceFolderLabel = new JLabel("Source code:");
+        final JLabel sourceFolderLabel = new JLabel("Source code to analyze:");
         final JTextField sourceFolderField = new JTextField(40);
         sourceFolderField.setText(ZapPropertiesManager.INSTANCE.getSourceFolder());
         final JButton browseButton = new JButton("Browse");
@@ -72,6 +72,29 @@ public class OptionsDialog {
                     sourceFolderField.setText(chooser.getSelectedFile().getAbsolutePath());
             }
         });
+
+       final JLabel oldSourceFolderLabel = new JLabel("Comparison source code(optional):");
+       final JTextField oldSourceFolderField = new JTextField(40);
+       oldSourceFolderField.setText(ZapPropertiesManager.INSTANCE.getOldSourceFolder());
+       final JButton oldBrowseButton = new JButton("Browse");
+       oldBrowseButton.addActionListener(new java.awt.event.ActionListener()
+       {
+           @Override
+           public void actionPerformed(java.awt.event.ActionEvent e)
+           {
+               JFileChooser oldChooser = new JFileChooser();
+               String currentDirectory = oldSourceFolderField.getText();
+               if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
+                   currentDirectory = System.getProperty("user.home");
+               }
+               oldChooser.setCurrentDirectory(new java.io.File(currentDirectory));
+               oldChooser.setDialogTitle("Select a folder or zip file");
+               oldChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+               oldChooser.setAcceptAllFileFilterUsed(false);
+               if (oldChooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
+                   oldSourceFolderField.setText(oldChooser.getSelectedFile().getAbsolutePath());
+           }
+       });
 
         JLabel hostLabel = new JLabel("Host:");
         JTextField hostField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetHost());
@@ -133,6 +156,28 @@ public class OptionsDialog {
         myPanel.add(sourceFolderLabel, labelConstraints);
         myPanel.add(sourceFolderField, textBoxConstraints);
         myPanel.add(browseButton, browseButtonConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 1;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 1;
+        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 1;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(oldSourceFolderLabel, labelConstraints);
+        myPanel.add(oldSourceFolderField, textBoxConstraints);
+        myPanel.add(oldBrowseButton, browseButtonConstraints);
 
         GridBagLayout mainLayout = new GridBagLayout();
         JPanel basePanel = new JPanel(mainLayout);
@@ -267,6 +312,7 @@ public class OptionsDialog {
             ZapPropertiesManager.setUseHttps(https);
             ZapPropertiesManager.setAutoSpider(autoSpider);
             ZapPropertiesManager.setSourceFolder(sourceFolderField.getText());
+            ZapPropertiesManager.setOldSourceFolder(oldSourceFolderField.getText());
 
             return true;
         }
@@ -282,7 +328,7 @@ public class OptionsDialog {
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
         final JLabel warningLabel = new JLabel("URL configuration is required to populate the site map with the detected endpoints");
-        final JLabel sourceFolderLabel = new JLabel("Source code:");
+        final JLabel sourceFolderLabel = new JLabel("Source code to analyze:");
         final JTextField sourceFolderField = new JTextField(40);
         sourceFolderField.setText(ZapPropertiesManager.INSTANCE.getSourceFolder());
         final JButton browseButton = new JButton("Browse");
@@ -301,6 +347,29 @@ public class OptionsDialog {
                 if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
                     sourceFolderField.setText(chooser.getSelectedFile().getAbsolutePath());
                 }
+            }
+        });
+
+        final JLabel oldSourceFolderLabel = new JLabel("Comparison source code(optional):");
+        final JTextField oldSourceFolderField = new JTextField(40);
+        oldSourceFolderField.setText(ZapPropertiesManager.INSTANCE.getOldSourceFolder());
+        final JButton oldBrowseButton = new JButton("Browse");
+        oldBrowseButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e)
+            {
+                JFileChooser oldChooser = new JFileChooser();
+                String currentDirectory = oldSourceFolderField.getText();
+                if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
+                    currentDirectory = System.getProperty("user.home");
+                }
+                oldChooser.setCurrentDirectory(new java.io.File(currentDirectory));
+                oldChooser.setDialogTitle("Select a folder or zip file");
+                oldChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                oldChooser.setAcceptAllFileFilterUsed(false);
+                if (oldChooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
+                    oldSourceFolderField.setText(oldChooser.getSelectedFile().getAbsolutePath());
             }
         });
 
@@ -363,6 +432,28 @@ public class OptionsDialog {
         myPanel.add(sourceFolderLabel, labelConstraints);
         myPanel.add(sourceFolderField, textBoxConstraints);
         myPanel.add(browseButton, browseButtonConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 1;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 1;
+        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 1;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(oldSourceFolderLabel, labelConstraints);
+        myPanel.add(oldSourceFolderField, textBoxConstraints);
+        myPanel.add(oldBrowseButton, browseButtonConstraints);
 
         GridBagLayout mainLayout = new GridBagLayout();
         JPanel basePanel = new JPanel(mainLayout);

@@ -33,6 +33,7 @@ import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
+import org.zaproxy.zap.extension.attacksurfacedetector.EndpointDecorator;
 import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import java.util.List;
@@ -57,27 +58,23 @@ public class LocalEndpointsAction extends EndpointsAction {
     protected Logger getLogger() {
         return LOGGER;
     }
-    @Override
-    public Endpoint.Info[] getEndpoints() {
-        return getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
-    }
 
-    public Endpoint.Info[] getEndpoints(String sourceFolder)
+    public EndpointDecorator[] getEndpoints(String sourceFolder)
     {
         getLogger().info("Got source information, about to generate endpoints.");
         if (sourceFolder== null || sourceFolder.trim().isEmpty())
             return  null;
 
         EndpointDatabase endpointDatabase = EndpointDatabaseFactory.getDatabase(sourceFolder);
-        Endpoint.Info[] endpoints = null;
+        EndpointDecorator[] endpoints = null;
         if (endpointDatabase != null)
         {
             List<Endpoint> endpointList = endpointDatabase.generateEndpoints();
             endpointList = EndpointUtil.flattenWithVariants(endpointList);
-            endpoints = new Endpoint.Info[endpointList.size()];
+            endpoints = new EndpointDecorator[endpointList.size()];
             int i = 0;
             for (Endpoint endpoint : endpointList)
-                endpoints[i++] = Endpoint.Info.fromEndpoint(endpoint);
+                endpoints[i++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint));
         }
         return endpoints;
     }

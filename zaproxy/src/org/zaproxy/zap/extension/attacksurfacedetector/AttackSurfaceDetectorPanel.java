@@ -129,7 +129,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         gridBagConstraints2.anchor = java.awt.GridBagConstraints.NORTHWEST;
         basePanel.add(scrollPane,gridBagConstraints2);
         this.add(basePanel, java.awt.BorderLayout.CENTER);
-
     }
 
     private javax.swing.JToolBar buildToolBar()
@@ -146,6 +145,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         JButton importButton = new JButton("Import Endpoints from Source");
         viewSelectedButton = new JButton("View Selected");
         viewSelectedButton.setEnabled(false);
+        ZapPropertiesManager.INSTANCE.setViewSelectedButton(viewSelectedButton);
         JButton optionsButton = new JButton("Options");
         importButton.addActionListener(new java.awt.event.ActionListener()
         {
@@ -155,14 +155,22 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
                 boolean configured = OptionsDialog.Validate(view);
                 boolean completed = false;
                 viewSelectedButton.setEnabled(false);
+                ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
                 if (configured)
                 {
-                    Endpoint.Info[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                    EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                    EndpointDecorator comparePoints[] = null;
+                    String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
+                    if(oldSourceFolder != null || !oldSourceFolder.isEmpty())
+                        comparePoints = getEndpoints(oldSourceFolder);
 
                     if ((endpoints == null) || (endpoints.length == 0))
                         view.showWarningDialog("Failed to retrieve endpoints from the source. Check your inputs.");
                     else
                     {
+                        if (comparePoints != null && comparePoints.length !=0)
+                            endpoints = compareEndpoints(endpoints, comparePoints, view);
+
                         fillEndpointsToTable(endpoints);
                         buildNodesFromEndpoints(endpoints);
                         String url = ZapPropertiesManager.INSTANCE.getTargetUrl();
@@ -191,6 +199,8 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 JPanel detailPanel = new JPanel();
                 detailPanel.setLayout(new GridBagLayout());
+                JLabel displayArea = new JLabel();
+                String displayStr = new String();
                 int y = 0;
                 GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
                 gridBagConstraints1.gridx = 0;
@@ -199,43 +209,74 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
                 gridBagConstraints1.insets = new java.awt.Insets(4,4,4,4);
                 gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                Endpoint.Info endpoint = ZapPropertiesManager.INSTANCE.getEndpoint();
+                EndpointDecorator decorator = ZapPropertiesManager.INSTANCE.getEndpointDecorator();
+                Endpoint.Info endpoint = decorator.getEndpoint();
+
                 if(endpoint != null)
                 {
-                    detailPanel.add(new JLabel("URL: " + endpoint.getUrlPath()), gridBagConstraints1);
-                    gridBagConstraints1 = new GridBagConstraints();
-                    gridBagConstraints1.gridx = 0;
-                    gridBagConstraints1.gridy = y++;
-                    gridBagConstraints1.weightx = 1.0D;
-                    gridBagConstraints1.insets = new java.awt.Insets(4,4,4,4);
-                    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                    gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                    detailPanel.add(new JLabel("Methods: "), gridBagConstraints1);
 
-                    gridBagConstraints1 = new GridBagConstraints();
-                    gridBagConstraints1.gridx = 0;
-                    gridBagConstraints1.gridy = y++;
-                    gridBagConstraints1.weightx = 1.0D;
-                    gridBagConstraints1.insets = new java.awt.Insets(4,4,4,4);
-                    gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                    gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
-
-                    if (endpoint.getHttpMethod().length() > 4)
-                        detailPanel.add(new JLabel(endpoint.getHttpMethod().substring(14)), gridBagConstraints1);
-                    else
-                        detailPanel.add(new JLabel(endpoint.getHttpMethod()), gridBagConstraints1);
-
-                    for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+                    if(decorator.getStatus() == EndpointDecorator.Status.NEW)
                     {
-                        gridBagConstraints1 = new GridBagConstraints();
-                        gridBagConstraints1.gridx = 0;
-                        gridBagConstraints1.gridy = y++;
-                        gridBagConstraints1.weightx = 1.0D;
-                        gridBagConstraints1.insets = new java.awt.Insets(4,4,4,4);
-                        gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                        gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                        detailPanel.add(new JLabel( parameter.getKey() + " - " + parameter.getValue().getDataType().getDisplayName()), gridBagConstraints1);
+                        displayStr = "<html><b>New Endpoint</b><br>";
+                        displayStr = displayStr + "URL:<br>";
                     }
+                    else
+                        displayStr = displayStr + "<html> URL:<br>";
+
+                    displayStr = displayStr + "" + endpoint.getUrlPath() + "<br><br>Methods:<br>";
+                    // TODO - Gather all Endpoint objects pointing to the same endpoint and output their HTTP methods (Endpoints only have
+                    //  one HTTP method at a time now)
+                    if(endpoint.getHttpMethod().length() >4)
+                        displayStr = displayStr + endpoint.getHttpMethod().substring(14);
+                    else
+                        displayStr = displayStr + endpoint.getHttpMethod();
+
+
+                    displayStr = displayStr +"<br>Parameters and type:<br>";
+                    if(decorator.getStatus() == EndpointDecorator.Status.CHANGED)
+                    {
+                        for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+                        {   boolean found = false;
+                            for (Map.Entry<String, RouteParameter> compParameter : decorator.getComparePoint().getParameters().entrySet())
+                            {
+                                if (parameter.getKey().equalsIgnoreCase(compParameter.getKey()))
+                                {
+                                    found = true;
+                                    if(!parameter.getValue().getDataType().getDisplayName().equals(compParameter.getValue().getDataType().getDisplayName()))
+                                        displayStr = displayStr + "<strong>" + parameter.getKey() + " - " + compParameter.getValue().getDataType().getDisplayName().toUpperCase() + " -> " + parameter.getValue().getDataType().getDisplayName().toUpperCase()+"</strong> (modified parameter type) <br>";
+                                    else
+                                        displayStr = displayStr + parameter.getKey() + " - "+ parameter.getValue().getDataType().getDisplayName() + "<br>";
+                                    break;
+                                }
+                            }
+                            if (!found)
+                                displayStr = displayStr + "<strong>" + parameter.getKey() + "</strong> - <strong>" + parameter.getValue().getDataType().getDisplayName().toUpperCase() + "</strong> (added parameter)<br>";
+                        }
+                        for (Map.Entry<String, RouteParameter> compParameter : decorator.getComparePoint().getParameters().entrySet())
+                        {   boolean found = false;
+                            for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+                            {
+                                if (parameter.getKey().equalsIgnoreCase(compParameter.getKey()))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if(!found)
+                                displayStr = displayStr + "<span style='text-decoration: line-through;'>" +compParameter.getKey() + " - " + compParameter.getValue().getDataType().getDisplayName().toUpperCase() + "</span> (removed parameter)<br>";
+                        }
+                    }
+                    else
+                    {
+                        for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+                        {
+                            displayStr = displayStr + parameter.getKey() + " - "+ parameter.getValue().getDataType().getDisplayName() + "<br>";
+                        }
+                    }
+
+                    displayStr = displayStr + "</html>";
+                    displayArea.setText(displayStr);
+                    detailPanel.add(displayArea, gridBagConstraints1);
                 }
                 else
                     detailPanel.add(new JLabel("No Endpoint Selected"));
@@ -288,7 +329,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
     private JTable buildEndpointsTable()
    {
         Object[][] data = {};
-        String[] columnNames = { "Detected Endpoints","Number of Detected Parameters","GET Method","POST Method","Endpoint"};
+       String[] columnNames = { "Detected Endpoints","Number of Detected Parameters","GET Method","POST Method","New/Modified","Endpoint"};
         DefaultTableModel dtm = new DefaultTableModel(data, columnNames){
          @Override
          public boolean isCellEditable(int row, int column) { return false; }};
@@ -298,10 +339,10 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                Endpoint.Info endpoint = (Endpoint.Info)endpointsTable.getModel().getValueAt(endpointsTable.getSelectedRow(), 4);
+                EndpointDecorator decorator = (EndpointDecorator)endpointsTable.getModel().getValueAt(endpointsTable.getSelectedRow(), 5);
                 if(!viewSelectedButton.isEnabled())
                     viewSelectedButton.setEnabled(true);
-                ZapPropertiesManager.INSTANCE.setEndpoint(endpoint);
+                ZapPropertiesManager.INSTANCE.setEndpointDecorator(decorator);
         }
             @Override
             public void mousePressed(MouseEvent e){}
@@ -318,36 +359,40 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         tc = endpointsTable.getColumnModel().getColumn(3);
         tc.setCellEditor(endpointsTable.getDefaultEditor(Boolean.class));
         tc.setCellRenderer(endpointsTable.getDefaultRenderer(Boolean.class));
-        endpointsTable.getColumnModel().getColumn(4).setMinWidth(0);
-        endpointsTable.getColumnModel().getColumn(4).setMaxWidth(0);
-        endpointsTable.getColumnModel().getColumn(4).setWidth(0);
+       tc = endpointsTable.getColumnModel().getColumn(4);
+       tc.setCellEditor(endpointsTable.getDefaultEditor(Boolean.class));
+       tc.setCellRenderer(endpointsTable.getDefaultRenderer(Boolean.class));
+        endpointsTable.getColumnModel().getColumn(5).setMinWidth(0);
+        endpointsTable.getColumnModel().getColumn(5).setMaxWidth(0);
+        endpointsTable.getColumnModel().getColumn(5).setWidth(0);
 
         return endpointsTable;
    }
 
-    private Endpoint.Info[] getEndpoints(String sourceFolder)
+    private EndpointDecorator[] getEndpoints(String sourceFolder)
     {
         if (sourceFolder== null || sourceFolder.trim().isEmpty())
             return  null;
         EndpointDatabase endpointDatabase = EndpointDatabaseFactory.getDatabase(sourceFolder);
-        Endpoint.Info[] endpoints = null;
+        EndpointDecorator[] endpoints = null;
         if (endpointDatabase != null)
         {
             List<Endpoint> endpointList = endpointDatabase.generateEndpoints();
             endpointList = EndpointUtil.flattenWithVariants(endpointList);
-            endpoints = new Endpoint.Info[endpointList.size()];
+            endpoints = new EndpointDecorator[endpointList.size()];
             int i = 0;
             for (Endpoint endpoint : endpointList)
-                endpoints[i++] = Endpoint.Info.fromEndpoint(endpoint);
+                endpoints[i++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint));
         }
         return endpoints;
     }
 
-    public void buildNodesFromEndpoints(Endpoint.Info[] endpoints)
+    public void buildNodesFromEndpoints(EndpointDecorator[] endpoints)
     {
         int count = 0;
-        for (Endpoint.Info endpoint : endpoints)
+        for (EndpointDecorator decorator : endpoints)
         {
+            Endpoint.Info endpoint = decorator.getEndpoint();
             String endpointPath = endpoint.getUrlPath();
             if (endpointPath.startsWith("/"))
                 endpointPath = endpointPath.substring(1);
@@ -419,14 +464,15 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         attackThread.start();
     }
 
-    private void fillEndpointsToTable(Endpoint.Info[] endpoints)
+    private void fillEndpointsToTable(EndpointDecorator[] endpoints)
     {
         JTable endpointTable = ZapPropertiesManager.INSTANCE.getEndpointsTable();
         DefaultTableModel dtm = (DefaultTableModel)endpointTable.getModel();
         while(dtm.getRowCount() > 0)
             dtm.removeRow(0);
-        for (Endpoint.Info endpoint : endpoints)
+        for (EndpointDecorator decorator : endpoints)
         {
+            Endpoint.Info endpoint = decorator.getEndpoint();
             boolean hasGet = false;
             boolean hasPost = false;
             String method = endpoint.getHttpMethod();
@@ -434,7 +480,36 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
                 hasPost = true;
             else if (method.toString().equalsIgnoreCase("get"))
                 hasGet = true;
-            dtm.addRow(new Object[]{endpoint.getUrlPath(), endpoint.getParameters().size(), hasGet, hasPost, endpoint});
+            boolean status = (decorator.getStatus() == EndpointDecorator.Status.NEW) || (decorator.getStatus() == EndpointDecorator.Status.CHANGED);
+            dtm.addRow(new Object[]{endpoint.getUrlPath(), endpoint.getParameters().size(), hasGet, hasPost, status, decorator});
         }
+    }
+
+    private EndpointDecorator[] compareEndpoints(EndpointDecorator[] decorators, EndpointDecorator[] comparePoints, final ViewDelegate view)
+    {
+        for(EndpointDecorator decorator : decorators)
+        {
+            EndpointDecorator.Status newStat = EndpointDecorator.Status.NEW;
+            for(EndpointDecorator comparePointDec : comparePoints)
+            {
+                if (decorator.getEndpoint().getUrlPath().equals(comparePointDec.getEndpoint().getUrlPath()) && decorator.getEndpoint().getHttpMethod().equals(comparePointDec.getEndpoint().getHttpMethod()))
+                {
+                    if (decorator.checkSum() != comparePointDec.checkSum())
+                    {
+                        newStat = EndpointDecorator.Status.CHANGED;
+                        decorator.setComparePoint(comparePointDec.getEndpoint());
+                        break;
+                    }
+                    else
+                    {
+                        newStat = EndpointDecorator.Status.UNCHANGED;
+                        break;
+                    }
+                }
+            }
+            decorator.setStatus(newStat);
+        }
+
+        return decorators;
     }
 }

@@ -53,6 +53,7 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
             URL_KEY = "url",
             APP_ID_KEY = "application-id",
             SOURCE_FOLDER_KEY = "source-folder",
+            OLD_SOURCE_FOLDER_KEY = "old-source-folder",
             AUTO_SPIDER_KEY = "auto-spider",
             HOST_KEY = "host",
             PORT_KEY = "port",
@@ -69,20 +70,22 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
 
     private static JTable endpointsTable;
 
-    private Endpoint.Info endpoint;
+    private EndpointDecorator decorator;
+
+    private JButton viewSelectedButton;
 
     @Override
     public String getAppId() {
         return getProperties().getProperty(APP_ID_KEY);
     }
 
-    public Endpoint.Info getEndpoint() {
-        return endpoint;
+    public EndpointDecorator getEndpointDecorator() {
+        return decorator;
     }
 
-    public void setEndpoint(Endpoint.Info endpoint)
+    public void setEndpointDecorator(EndpointDecorator decorator)
     {
-        this.endpoint = endpoint;
+        this.decorator = decorator;
     }
 
     public void setEndpointsTable(JTable table){endpointsTable = table;}
@@ -95,6 +98,13 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         logger.info("returning source code folder " + sourceFolder);
         return sourceFolder;
     }
+    public String getOldSourceFolder()
+    {
+        String oldSourceFolder = getProperties().getProperty(OLD_SOURCE_FOLDER_KEY);
+        logger.info("returning source code folder " + oldSourceFolder);
+        return oldSourceFolder;
+    }
+
 
     public String getTargetHost()
     {
@@ -163,6 +173,13 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         saveProperties(properties);
     }
 
+    public static void setOldSourceFolder(String oldSourceFolder)
+    {
+        Properties properties = getProperties();
+        properties.setProperty(OLD_SOURCE_FOLDER_KEY, oldSourceFolder);
+        saveProperties(properties);
+    }
+
     public static void setTargetHost(String targetHost)
     {
         Properties properties = getProperties();
@@ -202,6 +219,15 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         else
             properties.setProperty(AUTO_SPIDER_KEY, "false");
         saveProperties(properties);
+    }
+
+    public JButton getViewSelectedButton()
+    {
+        return viewSelectedButton;
+    }
+    public void setViewSelectedButton(JButton viewSelectedButton)
+    {
+        this.viewSelectedButton = viewSelectedButton;
     }
     private static Properties getProperties()
     {

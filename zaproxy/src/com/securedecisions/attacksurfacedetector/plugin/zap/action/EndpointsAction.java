@@ -33,6 +33,7 @@ import com.securedecisions.attacksurfacedetector.plugin.zap.dialog.OptionsDialog
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
+import org.zaproxy.zap.extension.attacksurfacedetector.EndpointDecorator;
 import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import javax.swing.*;
@@ -57,15 +58,24 @@ public abstract class EndpointsAction extends JMenuItem {
                 getLogger().info("About to show dialog.");
                 boolean configured = OptionsDialog.Validate(view);
                 boolean completed = false;
+                ZapPropertiesManager.INSTANCE.getViewSelectedButton().setEnabled(false);
+                ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
 
                 if (configured)
                 {
-                    getLogger().info("configured");Endpoint.Info[] endpoints = getEndpoints();
+                    getLogger().info("configured");
+                    EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                    EndpointDecorator comparePoints[] = null;
+                    String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
+                    if(oldSourceFolder != null || !oldSourceFolder.isEmpty())
+                        comparePoints = getEndpoints(oldSourceFolder);
 
                     if ((endpoints == null) || (endpoints.length == 0))
 	                	view.showWarningDialog(getNoEndpointsMessage());
 	                else
 	                {
+                        if (comparePoints != null && comparePoints.length !=0)
+                            endpoints = compareEndpoints(endpoints, comparePoints, view);
                         fillEndpointsToTable(endpoints);
                         getLogger().info("Got " + endpoints.length + " endpoints.");
 
@@ -90,53 +100,54 @@ public abstract class EndpointsAction extends JMenuItem {
         });
     }
 
-    public void buildNodesFromEndpoints(Endpoint.Info[] endpoints , final ViewDelegate view)
+    public void buildNodesFromEndpoints(EndpointDecorator[] endpoints , final ViewDelegate view)
     {
-        for (Endpoint.Info endpoint : endpoints)
+        for (EndpointDecorator decorator : endpoints)
         {
-                String endpointPath = endpoint.getUrlPath();
-                if (endpointPath.startsWith("/"))
-                    endpointPath = endpointPath.substring(1);
-                endpointPath = endpointPath.replaceAll(GENERIC_INT_SEGMENT, "1");
-                boolean first = true;
-                String reqString = endpointPath;
-                String method = endpoint.getHttpMethod();
-                for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+            Endpoint.Info endpoint = decorator.getEndpoint();
+            String endpointPath = endpoint.getUrlPath();
+            if (endpointPath.startsWith("/"))
+                endpointPath = endpointPath.substring(1);
+            endpointPath = endpointPath.replaceAll(GENERIC_INT_SEGMENT, "1");
+            boolean first = true;
+            String reqString = endpointPath;
+            String method = endpoint.getHttpMethod();
+            for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
+            {
+                if (first)
                 {
-                    if (first)
-                    {
-                        first = false;
-                        reqString = reqString + "?";
-                    }
-                    else
-                        reqString = reqString + "&";
-
-                    if (parameter.getValue().getDataType() == ParameterDataType.STRING)
-                        reqString = reqString + parameter.getKey() + "="+"debug";
-
-                    else if (parameter.getValue().getDataType() == ParameterDataType.INTEGER)
-                        reqString = reqString + parameter.getKey() + "="+"-1";
-
-                    else if (parameter.getValue().getDataType() == ParameterDataType.BOOLEAN)
-                        reqString = reqString + parameter.getKey() + "="+"true";
-
-                    else if (parameter.getValue().getDataType() == ParameterDataType.DECIMAL)
-                        reqString = reqString + parameter.getKey() + "="+".1";
-
-                    else if (parameter.getValue().getDataType() == ParameterDataType.DATE_TIME)
-                        reqString = reqString + parameter.getKey() + "="+ new Date();
-
-                    else if (parameter.getValue().getDataType() == ParameterDataType.LOCAL_DATE)
-                        reqString = reqString + parameter.getKey() + "="+new Date();
-
-                    else
-                        reqString = reqString + parameter.getKey() + "=default";
-
+                    first = false;
+                    reqString = reqString + "?";
                 }
-                reqString = reqString.replace("{", "");
-                reqString = reqString.replace("}", "");
-                reqString = reqString.replace(" ", "");
-                nodes.put(reqString, method);
+                else
+                    reqString = reqString + "&";
+
+                if (parameter.getValue().getDataType() == ParameterDataType.STRING)
+                    reqString = reqString + parameter.getKey() + "="+"debug";
+
+                else if (parameter.getValue().getDataType() == ParameterDataType.INTEGER)
+                    reqString = reqString + parameter.getKey() + "="+"-1";
+
+                else if (parameter.getValue().getDataType() == ParameterDataType.BOOLEAN)
+                    reqString = reqString + parameter.getKey() + "="+"true";
+
+                else if (parameter.getValue().getDataType() == ParameterDataType.DECIMAL)
+                    reqString = reqString + parameter.getKey() + "="+".1";
+
+                else if (parameter.getValue().getDataType() == ParameterDataType.DATE_TIME)
+                    reqString = reqString + parameter.getKey() + "="+ new Date();
+
+                else if (parameter.getValue().getDataType() == ParameterDataType.LOCAL_DATE)
+                    reqString = reqString + parameter.getKey() + "="+new Date();
+
+                else
+                    reqString = reqString + parameter.getKey() + "=default";
+
+            }
+            reqString = reqString.replace("{", "");
+            reqString = reqString.replace("}", "");
+            reqString = reqString.replace(" ", "");
+            nodes.put(reqString, method);
         }
     }
 
@@ -168,17 +179,17 @@ public abstract class EndpointsAction extends JMenuItem {
         attackThread.start();
     }
 
-    private void fillEndpointsToTable(Endpoint.Info[] endpoints)
+    private void fillEndpointsToTable(EndpointDecorator[] endpoints)
     {
-        int count = 0;
         JTable endpointTable = ZapPropertiesManager.INSTANCE.getEndpointsTable();
         DefaultTableModel dtm = (DefaultTableModel)endpointTable.getModel();
 
         while(dtm.getRowCount() > 0)
             dtm.removeRow(0);
 
-        for (Endpoint.Info endpoint : endpoints)
+        for (EndpointDecorator decorator : endpoints)
         {
+            Endpoint.Info endpoint = decorator.getEndpoint();
             boolean hasGet = false;
             boolean hasPost = false;
             String method = endpoint.getHttpMethod();
@@ -186,16 +197,45 @@ public abstract class EndpointsAction extends JMenuItem {
                 hasPost = true;
             else if (method.toString().equalsIgnoreCase("get"))
                 hasGet = true;
+            boolean status = (decorator.getStatus() == EndpointDecorator.Status.NEW) || (decorator.getStatus() == EndpointDecorator.Status.CHANGED);
             dtm.addRow(new Object[]
                     {
                             endpoint.getUrlPath(),
                             endpoint.getParameters().size(),
                             hasGet,
                             hasPost,
-                            endpoint
+                            status,
+                            decorator
                     });
-            count++;
         }
+    }
+
+    private EndpointDecorator[] compareEndpoints(EndpointDecorator[] decorators, EndpointDecorator[] comparePoints, final ViewDelegate view)
+    {
+        for(EndpointDecorator decorator : decorators)
+        {
+            EndpointDecorator.Status newStat = EndpointDecorator.Status.NEW;
+            for(EndpointDecorator comparePointDec : comparePoints)
+            {
+                if (decorator.getEndpoint().getUrlPath().equals(comparePointDec.getEndpoint().getUrlPath()) && decorator.getEndpoint().getHttpMethod().equals(comparePointDec.getEndpoint().getHttpMethod()))
+                {
+                    if (decorator.checkSum() != comparePointDec.checkSum())
+                    {
+                        newStat = EndpointDecorator.Status.CHANGED;
+                        decorator.setComparePoint(comparePointDec.getEndpoint());
+                        break;
+                    }
+                    else
+                    {
+                        newStat = EndpointDecorator.Status.UNCHANGED;
+                        break;
+                    }
+                }
+            }
+            decorator.setStatus(newStat);
+        }
+
+        return decorators;
     }
 
     public void notifyProgress(AttackThread.Progress progress)
@@ -207,7 +247,7 @@ public abstract class EndpointsAction extends JMenuItem {
     protected abstract String getNoEndpointsMessage();
     protected abstract String getCompletedMessage();
     protected abstract Logger getLogger();
-    public abstract Endpoint.Info[] getEndpoints();
+    public abstract EndpointDecorator[] getEndpoints(String sourceFolder);
 
 
 }
