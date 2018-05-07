@@ -73,7 +73,7 @@ public class OptionsDialog {
             }
         });
 
-       final JLabel oldSourceFolderLabel = new JLabel("Comparison source code(optional):");
+       final JLabel oldSourceFolderLabel = new JLabel("Comparison source code (optional):");
        final JTextField oldSourceFolderField = new JTextField(40);
        oldSourceFolderField.setText(ZapPropertiesManager.INSTANCE.getOldSourceFolder());
        final JButton oldBrowseButton = new JButton("Browse");
@@ -350,7 +350,7 @@ public class OptionsDialog {
             }
         });
 
-        final JLabel oldSourceFolderLabel = new JLabel("Comparison source code(optional):");
+        final JLabel oldSourceFolderLabel = new JLabel("Comparison source code (optional):");
         final JTextField oldSourceFolderField = new JTextField(40);
         oldSourceFolderField.setText(ZapPropertiesManager.INSTANCE.getOldSourceFolder());
         final JButton oldBrowseButton = new JButton("Browse");
