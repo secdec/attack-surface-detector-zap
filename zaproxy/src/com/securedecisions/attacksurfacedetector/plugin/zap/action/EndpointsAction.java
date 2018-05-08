@@ -67,7 +67,7 @@ public abstract class EndpointsAction extends JMenuItem {
                     EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
                     EndpointDecorator comparePoints[] = null;
                     String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
-                    if(oldSourceFolder != null || !oldSourceFolder.isEmpty())
+                    if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
                         comparePoints = getEndpoints(oldSourceFolder);
 
                     if ((endpoints == null) || (endpoints.length == 0))
