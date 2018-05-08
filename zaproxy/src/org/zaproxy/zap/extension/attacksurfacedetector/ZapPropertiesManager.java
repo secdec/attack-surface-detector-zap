@@ -101,7 +101,7 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     public String getOldSourceFolder()
     {
         String oldSourceFolder = getProperties().getProperty(OLD_SOURCE_FOLDER_KEY);
-        logger.info("returning source code folder " + oldSourceFolder);
+        logger.info("returning old source code folder " + oldSourceFolder);
         return oldSourceFolder;
     }
 
@@ -130,25 +130,25 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     public boolean getAutoSpider()
     {
         String autoSpider = getProperties().getProperty(AUTO_SPIDER_KEY);
-        logger.info("returning autospider " + autoSpider);
+        boolean shouldSpider = false;
         if (autoSpider == null)
-            return false;
+            shouldSpider = false;
         if (autoSpider.equalsIgnoreCase("true"))
-            return true;
-        else
-            return false;
+            shouldSpider = true;
+        logger.info("returning autospider " + autoSpider + "(should spider? " + shouldSpider + ")");
+        return shouldSpider;
     }
 
     public boolean getUseHttps()
     {
         String useHttps = getProperties().getProperty(HTTPS_KEY);
-        logger.info("returning useHttps " + useHttps);
+        boolean shouldUseHttps = false;
         if (useHttps == null)
-            return false;
+            shoulduseHttps = false;
         if (useHttps.equalsIgnoreCase("true"))
-            return true;
-        else
-            return false;
+            shouldUseHttps = true;
+        logger.info("returning useHttps " + useHttps + "(should use https? " + shouldUseHttps +")");
+        return shouldUseHttps;
     }
 
     public static void setKeyAndUrl(String newKey, String newUrl)
