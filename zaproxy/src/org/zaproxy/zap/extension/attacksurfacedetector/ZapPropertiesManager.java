@@ -144,7 +144,7 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         String useHttps = getProperties().getProperty(HTTPS_KEY);
         boolean shouldUseHttps = false;
         if (useHttps == null)
-            shoulduseHttps = false;
+            shouldUseHttps = false;
         if (useHttps.equalsIgnoreCase("true"))
             shouldUseHttps = true;
         logger.info("returning useHttps " + useHttps + "(should use https? " + shouldUseHttps +")");
