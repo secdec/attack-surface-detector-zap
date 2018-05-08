@@ -1,9 +1,10 @@
 # Summary
 During web application penetration testing, it is important to enumerate  your application's attack surface. While Dynamic Application Security Testing (DAST) tools (such as Burp Suite and ZAP) are good at spidering to identify application attack surfaces, they will often fail to identify unlinked endpoints and optional parameters. These endpoints and parameters not found often go untested, which can leave your application open to an attacker.
-This tool is the Attack Surface Detector, a plugin for OWASP ZAP. This tool figures out the endpoints of a web application, the parameters these endpoints accept, and the data type of those parameters. This includes the unlinked endpoints a spider won't find in client-side code, or optional parameters totally unused in client-side code. The plugin then imports this data into Burp Suite so you view the results, or work with the detected endpoints and parameters from the target site map.
+This tool is the Attack Surface Detector, a plugin for OWASP ZAP. This tool figures out the endpoints of a web application, the parameters these endpoints accept, and the data type of those parameters. This includes the unlinked endpoints a spider won't find in client-side code, or optional parameters totally unused in client-side code. The plugin then imports this data into ZAP so you view the results, or work with the detected endpoints and parameters from the target site map.
 
 # How it Works
 The Attack Surface Detector uses static code analyses to identify web app endpoints by parsing routes and identifying parameters (with supported languages and frameworks).
+
 ## Supported Frameworks:
   * C# / ASP.NET MVC
   * C# / Web Forms
@@ -22,13 +23,11 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 3. Navigate to the source code *Directory*, open terminal and run the command `mvn clean package`
 4. The plugin will be located in the target folder named:  attacksurfacedetector-release-#.zap.
 
-
 # Installation
 
 ## Requirements
 * This plugin
-* OWASP ZAP
-
+* OWASP ZAP - https://github.com/zaproxy/zaproxy/wiki/Downloads
 
 ## How to Install
 
@@ -41,11 +40,3 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 *Note: The plugin file must be named attacksuracedetector-release-#.zap, where "#" is some number. This should be the default name when you download/grab the plugin.*
 3.	Click *Open*
 4.	Notice in the *Tools* menu, there are now new options to import endpoints.
-
-
-
-
-
-
-
-
