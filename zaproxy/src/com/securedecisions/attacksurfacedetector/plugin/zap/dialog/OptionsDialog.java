@@ -22,15 +22,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 package com.securedecisions.attacksurfacedetector.plugin.zap.dialog;
 
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class OptionsDialog {
     private static final Logger logger = Logger.getLogger(OptionsDialog.class);
@@ -68,6 +72,19 @@ public class OptionsDialog {
                 chooser.setDialogTitle("Select a folder or zip file");
                 chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.setAcceptAllFileFilterUsed(false);
+                chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+                chooser.addChoosableFileFilter( new FileFilter()
+                {
+                    public boolean accept(File f)
+                    {
+                        return f.isDirectory();
+                    }
+
+                    public String getDescription()
+                    {
+                        return "dir | Directory/Folder";
+                    }
+                });
                 if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
                     sourceFolderField.setText(chooser.getSelectedFile().getAbsolutePath());
             }
@@ -91,6 +108,19 @@ public class OptionsDialog {
                oldChooser.setDialogTitle("Select a folder or zip file");
                oldChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                oldChooser.setAcceptAllFileFilterUsed(false);
+               oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+               oldChooser.addChoosableFileFilter( new FileFilter()
+               {
+                   public boolean accept(File f)
+                   {
+                       return f.isDirectory();
+                   }
+
+                   public String getDescription()
+                   {
+                       return "dir | Directory/Folder";
+                   }
+               });
                if (oldChooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
                    oldSourceFolderField.setText(oldChooser.getSelectedFile().getAbsolutePath());
            }

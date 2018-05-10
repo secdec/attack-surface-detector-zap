@@ -43,10 +43,16 @@ package org.zaproxy.zap.extension.attacksurfacedetector;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.swing.*;
 
@@ -57,6 +63,7 @@ import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.AttackThread;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
 import com.securedecisions.attacksurfacedetector.plugin.zap.dialog.OptionsDialog;
+import org.apache.commons.io.FileUtils;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
@@ -386,6 +393,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         }
         return endpoints;
     }
+
 
     public void buildNodesFromEndpoints(EndpointDecorator[] endpoints)
     {
