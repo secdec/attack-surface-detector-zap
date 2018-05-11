@@ -127,17 +127,20 @@ public class OptionsDialog {
        });
 
         JLabel hostLabel = new JLabel("Host:");
-        JTextField hostField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetHost());
+        JTextField hostField = new JTextField(40);
+        hostField.setText(ZapPropertiesManager.INSTANCE.getTargetHost());
 
         JLabel portLabel = new JLabel("Port:");
-        JTextField portField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetPort());
+        JTextField portField = new JTextField(40);
+        portField.setText(ZapPropertiesManager.INSTANCE.getTargetPort());
         PlainDocument portDoc = (PlainDocument)portField.getDocument();
         portDoc.setDocumentFilter(new PortFilter());
 
         JLabel pathLabel = new JLabel("Path (optional):");
-        JTextField pathField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetPath());
+        JTextField pathField = new JTextField(40);
+        pathField.setText(ZapPropertiesManager.INSTANCE.getTargetPath());
 
-        JLabel httpsLabel = new JLabel("Use HTTPS:");
+        JLabel httpsLabel = new JLabel("Use HTTPS");
         JCheckBox httpsField = new JCheckBox();
         httpsField.setSelected(https);
 
@@ -150,7 +153,7 @@ public class OptionsDialog {
         };
 
         httpsField.addActionListener(applicationCheckBoxHttpActionListener);
-        JLabel autoSpiderLabel = new JLabel("Automatically start spider after importing endpoints: ");
+        JLabel autoSpiderLabel = new JLabel("Automatically start spider after importing endpoints");
         JCheckBox autoSpiderField = new JCheckBox();
         autoSpiderField.setSelected(autoSpider);
         ActionListener applicationCheckBoxSpiderActionListener = new ActionListener()
@@ -167,13 +170,14 @@ public class OptionsDialog {
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
         labelConstraints.gridy = 0;
+        labelConstraints.weightx = 1;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         GridBagConstraints textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         GridBagConstraints browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
@@ -197,7 +201,7 @@ public class OptionsDialog {
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 1;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
@@ -218,108 +222,100 @@ public class OptionsDialog {
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
-        labelConstraints.gridy = 0;
-        labelConstraints.weightx = 1.0;
-        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
-
-        textBoxConstraints = new GridBagConstraints();
-        textBoxConstraints.gridwidth = 4;
-        textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 0;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
-
-        optionsPanel.add(hostLabel, labelConstraints);
-        optionsPanel.add(hostField, textBoxConstraints);
-
-        labelConstraints = new GridBagConstraints();
-        labelConstraints.gridwidth = 1;
-        labelConstraints.gridx = 0;
-        labelConstraints.gridy = 1;
-        labelConstraints.weightx = 1.0;
-        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
-
-        textBoxConstraints = new GridBagConstraints();
-        textBoxConstraints.gridwidth = 4;
-        textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 1;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
-
-        optionsPanel.add(portLabel, labelConstraints);
-        optionsPanel.add(portField, textBoxConstraints);
-
-        labelConstraints = new GridBagConstraints();
-        labelConstraints.gridwidth = 1;
-        labelConstraints.gridx = 0;
         labelConstraints.gridy = 2;
-        labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 2;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
-        optionsPanel.add(pathLabel, labelConstraints);
-        optionsPanel.add(pathField, textBoxConstraints);
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 2;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(hostLabel, labelConstraints);
+        myPanel.add(hostField, textBoxConstraints);
 
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
         labelConstraints.gridy = 3;
-        labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 3;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
-        optionsPanel.add(httpsLabel, labelConstraints);
-        optionsPanel.add(httpsField, textBoxConstraints);
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 3;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(portLabel, labelConstraints);
+        myPanel.add(portField, textBoxConstraints);
 
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
         labelConstraints.gridy = 4;
-        labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 4;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
-        optionsPanel.add(autoSpiderLabel, labelConstraints);
-        optionsPanel.add(autoSpiderField, textBoxConstraints);
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 4;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(pathLabel, labelConstraints);
+        myPanel.add(pathField, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 0;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 0;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+        textBoxConstraints.weightx = 1;
+
+        optionsPanel.add(httpsField, labelConstraints);
+        optionsPanel.add(httpsLabel, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 1;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 1;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+        textBoxConstraints.weightx = 1;
+
+        optionsPanel.add(autoSpiderField, labelConstraints);
+        optionsPanel.add(autoSpiderLabel, textBoxConstraints);
 
         GridBagConstraints panelConstraints = new GridBagConstraints();
         panelConstraints.gridwidth = 1;
         panelConstraints.gridx = 0;
         panelConstraints.gridy = 0;
-        panelConstraints.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(myPanel, panelConstraints);
 
         panelConstraints = new GridBagConstraints();
@@ -357,7 +353,6 @@ public class OptionsDialog {
         logger.info("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
-        final JLabel warningLabel = new JLabel("URL configuration is required to populate the site map with the detected endpoints");
         final JLabel sourceFolderLabel = new JLabel("Source code to analyze:");
         final JTextField sourceFolderField = new JTextField(40);
         sourceFolderField.setText(ZapPropertiesManager.INSTANCE.getSourceFolder());
@@ -365,18 +360,32 @@ public class OptionsDialog {
         browseButton.addActionListener(new java.awt.event.ActionListener()
         {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
+            public void actionPerformed(java.awt.event.ActionEvent e)
+            {
                 JFileChooser chooser = new JFileChooser();
                 String currentDirectory = sourceFolderField.getText();
-                if ((currentDirectory == null) || (currentDirectory.trim().equals("")))
+                if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
                     currentDirectory = System.getProperty("user.home");
+                }
                 chooser.setCurrentDirectory(new java.io.File(currentDirectory));
                 chooser.setDialogTitle("Select a folder or zip file");
                 chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.setAcceptAllFileFilterUsed(false);
-                if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION) {
+                chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+                chooser.addChoosableFileFilter( new FileFilter()
+                {
+                    public boolean accept(File f)
+                    {
+                        return f.isDirectory();
+                    }
+
+                    public String getDescription()
+                    {
+                        return "dir | Directory/Folder";
+                    }
+                });
+                if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
                     sourceFolderField.setText(chooser.getSelectedFile().getAbsolutePath());
-                }
             }
         });
 
@@ -398,25 +407,50 @@ public class OptionsDialog {
                 oldChooser.setDialogTitle("Select a folder or zip file");
                 oldChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 oldChooser.setAcceptAllFileFilterUsed(false);
+                oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+                oldChooser.addChoosableFileFilter( new FileFilter()
+                {
+                    public boolean accept(File f)
+                    {
+                        return f.isDirectory();
+                    }
+
+                    public String getDescription()
+                    {
+                        return "dir | Directory/Folder";
+                    }
+                });
                 if (oldChooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
                     oldSourceFolderField.setText(oldChooser.getSelectedFile().getAbsolutePath());
             }
         });
 
+        JLabel warningLabel = new JLabel();
+        if(ZapPropertiesManager.INSTANCE.getSourceFolder() == null || ZapPropertiesManager.INSTANCE.getSourceFolder().isEmpty())
+            warningLabel.setText("Source code is required to import endpoints");
+        else
+            warningLabel.setText("URL configuration is required to populate the site map with the detected endpoints");
+        JPanel warningPanel = new JPanel();
+        warningPanel.add(warningLabel);
+
         JLabel hostLabel = new JLabel("Host:");
-        JTextField hostField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetHost());
+        JTextField hostField = new JTextField(40);
+        hostField.setText(ZapPropertiesManager.INSTANCE.getTargetHost());
 
         JLabel portLabel = new JLabel("Port:");
-        JTextField portField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetPort());
+        JTextField portField = new JTextField(40);
+        portField.setText(ZapPropertiesManager.INSTANCE.getTargetPort());
         PlainDocument portDoc = (PlainDocument)portField.getDocument();
         portDoc.setDocumentFilter(new PortFilter());
 
         JLabel pathLabel = new JLabel("Path (optional):");
-        JTextField pathField = new JTextField(ZapPropertiesManager.INSTANCE.getTargetPath());
+        JTextField pathField = new JTextField(40);
+        pathField.setText(ZapPropertiesManager.INSTANCE.getTargetPath());
 
-        JLabel httpsLabel = new JLabel("Use HTTPS:");
+        JLabel httpsLabel = new JLabel("Use HTTPS");
         JCheckBox httpsField = new JCheckBox();
         httpsField.setSelected(https);
+
         ActionListener applicationCheckBoxHttpActionListener = new ActionListener()
         {
             @Override
@@ -424,9 +458,9 @@ public class OptionsDialog {
                 https = httpsField.isSelected();
             }
         };
-        httpsField.addActionListener(applicationCheckBoxHttpActionListener);
 
-        JLabel autoSpiderLabel = new JLabel("Automatically start spider after importing endpoints: ");
+        httpsField.addActionListener(applicationCheckBoxHttpActionListener);
+        JLabel autoSpiderLabel = new JLabel("Automatically start spider after importing endpoints");
         JCheckBox autoSpiderField = new JCheckBox();
         autoSpiderField.setSelected(autoSpider);
         ActionListener applicationCheckBoxSpiderActionListener = new ActionListener()
@@ -443,13 +477,14 @@ public class OptionsDialog {
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
         labelConstraints.gridy = 0;
+        labelConstraints.weightx = 1;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         GridBagConstraints textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         GridBagConstraints browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
@@ -473,7 +508,7 @@ public class OptionsDialog {
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 1;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
@@ -488,111 +523,101 @@ public class OptionsDialog {
         GridBagLayout mainLayout = new GridBagLayout();
         JPanel basePanel = new JPanel(mainLayout);
 
-        JPanel warningPanel = new JPanel();
-        warningPanel.add(warningLabel);
-
         GridBagLayout optionsLayout = new GridBagLayout();
         JPanel optionsPanel = new JPanel(optionsLayout);
 
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
-        labelConstraints.gridy = 0;
-        labelConstraints.weightx = 1.0;
-        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
-
-        textBoxConstraints = new GridBagConstraints();
-        textBoxConstraints.gridwidth = 4;
-        textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 0;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
-
-        optionsPanel.add(hostLabel, labelConstraints);
-        optionsPanel.add(hostField, textBoxConstraints);
-
-        labelConstraints = new GridBagConstraints();
-        labelConstraints.gridwidth = 1;
-        labelConstraints.gridx = 0;
-        labelConstraints.gridy = 1;
-        labelConstraints.weightx = 1.0;
-        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
-
-        textBoxConstraints = new GridBagConstraints();
-        textBoxConstraints.gridwidth = 4;
-        textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 1;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
-
-        optionsPanel.add(portLabel, labelConstraints);
-        optionsPanel.add(portField, textBoxConstraints);
-
-        labelConstraints = new GridBagConstraints();
-        labelConstraints.gridwidth = 1;
-        labelConstraints.gridx = 0;
         labelConstraints.gridy = 2;
-        labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 2;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
-        optionsPanel.add(pathLabel, labelConstraints);
-        optionsPanel.add(pathField, textBoxConstraints);
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 2;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(hostLabel, labelConstraints);
+        myPanel.add(hostField, textBoxConstraints);
 
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
         labelConstraints.gridy = 3;
-        labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 3;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
-        optionsPanel.add(httpsLabel, labelConstraints);
-        optionsPanel.add(httpsField, textBoxConstraints);
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 3;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(portLabel, labelConstraints);
+        myPanel.add(portField, textBoxConstraints);
 
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
         labelConstraints.gridy = 4;
-        labelConstraints.weightx = 1.0;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        labelConstraints.anchor = GridBagConstraints.WEST;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = 4;
-        textBoxConstraints.weighty = 1.0;
-        textBoxConstraints.weightx = 1.0;
-        textBoxConstraints.fill = GridBagConstraints.HORIZONTAL;
-        textBoxConstraints.anchor = GridBagConstraints.EAST;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
 
-        optionsPanel.add(autoSpiderLabel, labelConstraints);
-        optionsPanel.add(autoSpiderField, textBoxConstraints);
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 4;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(pathLabel, labelConstraints);
+        myPanel.add(pathField, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 0;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 0;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+        textBoxConstraints.weightx = 1;
+
+        optionsPanel.add(httpsField, labelConstraints);
+        optionsPanel.add(httpsLabel, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 1;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 1;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+        textBoxConstraints.weightx = 1;
+
+        optionsPanel.add(autoSpiderField, labelConstraints);
+        optionsPanel.add(autoSpiderLabel, textBoxConstraints);
 
         GridBagConstraints panelConstraints = new GridBagConstraints();
         panelConstraints.gridwidth = 1;
@@ -605,7 +630,6 @@ public class OptionsDialog {
         panelConstraints.gridwidth = 1;
         panelConstraints.gridx = 0;
         panelConstraints.gridy = 1;
-        panelConstraints.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(myPanel, panelConstraints);
 
         panelConstraints = new GridBagConstraints();
@@ -614,6 +638,7 @@ public class OptionsDialog {
         panelConstraints.gridy = 2;
         panelConstraints.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(optionsPanel, panelConstraints);
+
         Object[] options1 = { "Submit", "Reset", "Cancel" };
         int result = JOptionPane.showOptionDialog(view.getMainFrame(), basePanel, "Attack Surface Detector",
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
