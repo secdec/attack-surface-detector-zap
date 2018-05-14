@@ -94,7 +94,7 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     public String getAuthor()
     {
         logger.info("Getting Author");
-        return "Secure Decisons";
+        return "Secure Decisions";
     }
 
     @Override
