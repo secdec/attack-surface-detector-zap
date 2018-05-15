@@ -25,9 +25,6 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 
 # Installation
 
-## Requirements
-* This plugin
-* OWASP ZAP - https://github.com/zaproxy/zaproxy/wiki/Downloads
 
 ## How to Install
 
@@ -35,8 +32,4 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 2.	Launch application
 
 ### Installing the Plugin
-1.	Go to File > Load Add-On File.
-2.	In the popup, browse to attacksurfacedetector-release-#.zap
-*Note: The plugin file must be named attacksurfacedetector-release-#.zap, where "#" is some number. This should be the default name when you download/grab the plugin.*
-3.	Click *Open*
-4.	Notice in the *Tools* menu, there are now new options to import endpoints.
+1. For Build/install instructions click [here:](https://github.com/secdec/attack-surface-detector-burp/wiki)
