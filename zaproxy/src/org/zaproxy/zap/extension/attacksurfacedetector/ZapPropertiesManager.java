@@ -130,11 +130,7 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     public boolean getAutoSpider()
     {
         String autoSpider = getProperties().getProperty(AUTO_SPIDER_KEY);
-        boolean shouldSpider = false;
-        if (autoSpider == null)
-            shouldSpider = false;
-        if (autoSpider.equalsIgnoreCase("true"))
-            shouldSpider = true;
+        boolean shouldSpider = Boolean.parseBoolean(autoSpider);
         logger.info("returning autospider " + autoSpider + "(should spider? " + shouldSpider + ")");
         return shouldSpider;
     }
@@ -142,11 +138,7 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     public boolean getUseHttps()
     {
         String useHttps = getProperties().getProperty(HTTPS_KEY);
-        boolean shouldUseHttps = false;
-        if (useHttps == null)
-            shouldUseHttps = false;
-        if (useHttps.equalsIgnoreCase("true"))
-            shouldUseHttps = true;
+        boolean shouldUseHttps = Boolean.parseBoolean(useHttps);
         logger.info("returning useHttps " + useHttps + "(should use https? " + shouldUseHttps +")");
         return shouldUseHttps;
     }
