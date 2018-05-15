@@ -37,6 +37,6 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 ### Installing the Plugin
 1.	Go to File > Load Add-On File.
 2.	In the popup, browse to attacksurfacedetector-release-#.zap
-*Note: The plugin file must be named attacksuracedetector-release-#.zap, where "#" is some number. This should be the default name when you download/grab the plugin.*
+*Note: The plugin file must be named attacksurfacedetector-release-#.zap, where "#" is some number. This should be the default name when you download/grab the plugin.*
 3.	Click *Open*
 4.	Notice in the *Tools* menu, there are now new options to import endpoints.
