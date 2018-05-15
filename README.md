@@ -32,4 +32,4 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 2.	Launch application
 
 ### Installing the Plugin
-1. For Build/install instructions click [here:](https://github.com/secdec/attack-surface-detector-burp/wiki)
+1. For Build/install instructions click [here:](https://github.com/secdec/attack-surface-detector-zap/wiki)
