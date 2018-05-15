@@ -73,6 +73,7 @@ public class OptionsDialog {
                 chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.setAcceptAllFileFilterUsed(false);
                 chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+                chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.war | Web application archive", "war"));
                 chooser.addChoosableFileFilter( new FileFilter()
                 {
                     public boolean accept(File f)
@@ -109,6 +110,7 @@ public class OptionsDialog {
                oldChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                oldChooser.setAcceptAllFileFilterUsed(false);
                oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+               oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.war | Web application archive", "war"));
                oldChooser.addChoosableFileFilter( new FileFilter()
                {
                    public boolean accept(File f)
@@ -372,6 +374,7 @@ public class OptionsDialog {
                 chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 chooser.setAcceptAllFileFilterUsed(false);
                 chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+                chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.war | Web application archive", "war"));
                 chooser.addChoosableFileFilter( new FileFilter()
                 {
                     public boolean accept(File f)
@@ -408,6 +411,7 @@ public class OptionsDialog {
                 oldChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 oldChooser.setAcceptAllFileFilterUsed(false);
                 oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.zip | ZIP archive", "zip"));
+                oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.war | Web application archive", "war"));
                 oldChooser.addChoosableFileFilter( new FileFilter()
                 {
                     public boolean accept(File f)
