@@ -48,7 +48,7 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     public static final ZapPropertiesManager INSTANCE = new ZapPropertiesManager();
     private ZapPropertiesManager(){}
     private static final String
-            FILE_NAME = "threadfix.properties",
+            FILE_NAME = "asd.properties",
             API_KEY_KEY = "key",
             URL_KEY = "url",
             APP_ID_KEY = "application-id",
