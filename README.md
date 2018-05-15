@@ -16,15 +16,6 @@ The Attack Surface Detector uses static code analyses to identify web app endpoi
 
 To see a brief demonstration for the Attack Surface Detector, you can check it out [here:](https://youtu.be/jUUJNRcmqwI) *note: this demonstration is for a plugin built for Portswigger's Burp Suite. Implementation and operation is nearly identical to this plugin*
 
-# Building the Plugin
-
-1.  Install *Maven*: https://maven.apache.org/install.html
-2. Clone *Attack Surface Detector* repository:  https://github.com/secdec/attack-surface-detector-zap
-3. Navigate to the source code *Directory*, open terminal and run the command `mvn clean package`
-4. The plugin will be located in the target folder named:  attacksurfacedetector-release-#.zap.
-
-# Installation
-
 
 ## How to Install
 
@@ -33,3 +24,8 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 
 ### Installing the Plugin
 1. For Build/install instructions click [here:](https://github.com/secdec/attack-surface-detector-zap/wiki)
+
+
+##License
+
+Licensed under the [MPL](https://github.com/secdec/attack-surface-detector-zap/blob/master/LICENSE) License.
