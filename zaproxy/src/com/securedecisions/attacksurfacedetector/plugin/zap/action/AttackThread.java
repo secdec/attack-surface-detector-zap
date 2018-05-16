@@ -129,7 +129,7 @@ public class AttackThread extends Thread {
         }
     }
 
-    private void spider(SiteNode startNode) throws InterruptedException, MalformedURLException
+    private void spider(SiteNode startNode)throws MalformedURLException
     {
         logger.info("About to grab spider.");
         ExtensionSpider extSpider = (ExtensionSpider) Control.getSingleton().getExtensionLoader().getExtension(ExtensionSpider.NAME);
@@ -153,38 +153,29 @@ public class AttackThread extends Thread {
             if(extension != null)
                 extension.notifyProgress(Progress.SPIDER);
             startNode.setAllowsChildren(true);
-            for (Map.Entry<String, String> node : nodes.entrySet()){
+            for (Map.Entry<String, String> node : nodes.entrySet())
+            {
                 logger.info("About to call accessNode.");
                 SiteNode childNode = accessNode(new URL(url + node.getKey()), node.getValue());
                 logger.info("got out of accessNode.");
-                if (childNode != null) {
+                if (childNode != null)
                     logger.info("Child node != null, child node is " + childNode);
-                    //childNode.setParent(startNode);
-                    //startNode.add(childNode);
-                } else {
+                else
                     logger.info("child node was null.");
-                }
-               // extSpider.startScanNode(childNode);
             }
             logger.info("about to start the extension. node = " + startNode);
             logger.info("child count = " + startNode.getChildCount());
             extSpider.startScanNode(startNode);
             logger.info("Started the extension.");
         }
-        // Give some time to the spider to finish to setup and start itself.
-        sleep(1500);
-        try
+        while (extSpider.isScanning(startNode, true))
         {
-            // Wait for the spider to complete
-            while (extSpider.isScanning(startNode, true)) {
-                sleep (500);
-                if (this.stopAttack) {
-                    extSpider.stopScan(startNode);
-                    break;
-                }
+            if (this.stopAttack)
+            {
+                extSpider.stopScan(startNode);
+                break;
             }
         }
-        catch (InterruptedException e) {/* Ignore*/}
         if (stopAttack)
         {
             logger.debug("Attack stopped manually");
@@ -192,9 +183,6 @@ public class AttackThread extends Thread {
                 extension.notifyProgress(Progress.STOPPED);
             return;
         }
-
-        // Pause before the spider seems to help
-        sleep(2000);
         if (stopAttack)
         {
             logger.debug("Attack stopped manually");
@@ -232,14 +220,7 @@ public class AttackThread extends Thread {
             {
                 startNode = Model.getSingleton().getSession().getSiteTree().findNode(new URI(url.toString(), false));
                 if (startNode != null)
-                {
                     break;
-                }
-                try
-                {
-                    sleep (200);
-                }
-                catch (InterruptedException e) {/*ignore*/}
             }
         }
         catch (Exception e1)
@@ -254,10 +235,8 @@ public class AttackThread extends Thread {
     private HttpSender getHttpSender()
     {
         if (httpSender == null)
-        {
-            httpSender = new HttpSender(Model.getSingleton().getOptionsParam().getConnectionParam(), true,
-                    HttpSender.MANUAL_REQUEST_INITIATOR);
-        }
+            httpSender = new HttpSender(Model.getSingleton().getOptionsParam().getConnectionParam(), true, HttpSender.MANUAL_REQUEST_INITIATOR);
+
         return httpSender;
     }
 }
