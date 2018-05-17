@@ -78,11 +78,11 @@ public class AttackThread extends Thread {
             SiteNode startNode = accessNode(this.url, "get");
             String urlString = url.toString();
 
-            logger.info("Starting at url : " + urlString);
+            logger.debug("Starting at url : " + urlString);
 
             if (startNode == null)
             {
-                logger.debug("Failed to access URL " + urlString);
+                logger.error("Failed to access URL " + urlString);
                 if(extension != null)
                     extension.notifyProgress(Progress.FAILED);
                 return;
@@ -100,13 +100,13 @@ public class AttackThread extends Thread {
             {
                 for (Map.Entry<String, String> node : nodes.entrySet())
                 {
-                    logger.info("About to call accessNode.");
+                    logger.debug("About to call accessNode.");
                     SiteNode childNode = accessNode(new URL(url + node.getKey()), node.getValue());
-                    logger.info("got out of accessNode.");
+                    logger.debug("got out of accessNode.");
                     if (childNode != null)
-                        logger.info("Child node != null, child node is " + childNode);
+                        logger.debug("Child node != null, child node is " + childNode);
                     else
-                        logger.info("child node was null.");
+                        logger.debug("child node was null.");
                 }
             }
             ExtensionActiveScan extAscan = (ExtensionActiveScan) Control.getSingleton().getExtensionLoader().getExtension(ExtensionActiveScan.NAME);
@@ -118,7 +118,6 @@ public class AttackThread extends Thread {
             else
             {
                 extension.notifyProgress(Progress.ASCAN);
-                extAscan.onHttpRequestSend(startNode.getHistoryReference().getHttpMessage());
             }
         }
         catch (Exception e)
@@ -131,9 +130,9 @@ public class AttackThread extends Thread {
 
     private void spider(SiteNode startNode)throws MalformedURLException
     {
-        logger.info("About to grab spider.");
+        logger.debug("About to grab spider.");
         ExtensionSpider extSpider = (ExtensionSpider) Control.getSingleton().getExtensionLoader().getExtension(ExtensionSpider.NAME);
-        logger.info("Starting spider.");
+        logger.debug("Starting spider.");
         if (extSpider == null) {
             logger.error("No spider");
             if(extension != null)
@@ -149,30 +148,31 @@ public class AttackThread extends Thread {
         }
         else
         {
-            logger.info("Starting spider.");
+            logger.debug("Starting spider.");
             if(extension != null)
                 extension.notifyProgress(Progress.SPIDER);
             startNode.setAllowsChildren(true);
             for (Map.Entry<String, String> node : nodes.entrySet())
             {
-                logger.info("About to call accessNode.");
+                logger.debug("About to call accessNode.");
                 SiteNode childNode = accessNode(new URL(url + node.getKey()), node.getValue());
-                logger.info("got out of accessNode.");
+                logger.debug("got out of accessNode.");
                 if (childNode != null)
-                    logger.info("Child node != null, child node is " + childNode);
+                    logger.debug("Child node != null, child node is " + childNode);
                 else
-                    logger.info("child node was null.");
+                    logger.debug("child node was null.");
             }
-            logger.info("about to start the extension. node = " + startNode);
-            logger.info("child count = " + startNode.getChildCount());
+            logger.debug("about to start the extension. node = " + startNode);
+            logger.debug("child count = " + startNode.getChildCount());
             extSpider.startScanNode(startNode);
-            logger.info("Started the extension.");
+            logger.debug("Started the extension.");
         }
-        while (extSpider.isScanning(startNode, true))
+        while (extSpider.getActiveScans()!= null && extSpider.getActiveScans().size() != 0)
         {
             if (this.stopAttack)
             {
-                extSpider.stopScan(startNode);
+                //extSpider.stopScan(startNode);
+                extSpider.stopAllScans();
                 break;
             }
         }
@@ -193,7 +193,7 @@ public class AttackThread extends Thread {
 
     private SiteNode accessNode(URL url, String method)
     {
-        logger.info("Trying to find a node for " + url);
+        logger.debug("Trying to find a node for " + url);
         SiteNode startNode = null;
         // Request the URL
         try {
@@ -225,10 +225,10 @@ public class AttackThread extends Thread {
         }
         catch (Exception e1)
         {
-            logger.info(e1.getMessage(), e1);
+            logger.error(e1.getMessage(), e1);
             return null;
         }
-        logger.warn("returning " + startNode);
+        logger.debug("returning " + startNode);
         return startNode;
     }
 

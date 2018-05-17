@@ -44,33 +44,33 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     JTabbedPane tabbedPane;
     JCheckBox autoSpiderField;
     private static final Logger logger = Logger.getLogger(AttackSurfaceDetector.class);
-    static { logger.info("Loading Class"); }
+    static { logger.debug("Loading Class"); }
 
     public AttackSurfaceDetector()
     {
         super();
-        logger.info("calling constructor");
+        logger.debug("calling constructor");
         initialize();
-        logger.info("No-arg Constructor");
+        logger.debug("No-arg Constructor");
         this.setEnabled(true);
     }
 
     public AttackSurfaceDetector(String name)
     {
         super(name);
-        logger.info("1-arg Constructor");
+        logger.debug("1-arg Constructor");
     }
 
     private void initialize()
     {
-        logger.info("Initialize");
+        logger.debug("Initialize");
         this.setName("Attack Surface Detector");
     }
 
     @Override
     public void hook(ExtensionHook extensionHook)
     {
-        logger.info("Hook");
+        logger.debug("Hook");
         super.hook(extensionHook);
         if (getView() != null)
         {
@@ -81,7 +81,7 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
 
     public LocalEndpointsAction getLocalEndpointsAction()
     {
-        logger.info("Getting menu");
+        logger.debug("Getting menu");
         if (localEndpointsAction == null)
             localEndpointsAction = new LocalEndpointsAction(getView(), getModel());
 
@@ -93,24 +93,24 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     @Override
     public String getAuthor()
     {
-        logger.info("Getting Author");
+        logger.debug("Getting Author");
         return "Secure Decisions";
     }
 
     @Override
     public String getDescription()
     {
-        logger.info("Getting Description");
+        logger.debug("Getting Description");
         return "Source Code Analysis";
     }
 
     @Override
     public URL getURL()
     {
-        logger.info("Getting URL");
+        logger.debug("Getting URL");
         try
         {
-            return new URL("https://github.com/denimgroup/threadfix/wiki/Zap-Plugin");
+            return new URL("https://github.com/secdec/attack-surface-detector-zap/wiki");
         }
         catch (MalformedURLException e)
         {

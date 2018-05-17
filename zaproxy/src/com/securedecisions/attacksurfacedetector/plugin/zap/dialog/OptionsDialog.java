@@ -51,7 +51,7 @@ public class OptionsDialog {
 
    public static boolean show(final ViewDelegate view)
    {
-        logger.info("Attempting to show dialog.");
+        logger.debug("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
         final JLabel sourceFolderLabel = new JLabel("Source code to analyze:");
@@ -352,7 +352,7 @@ public class OptionsDialog {
 
     public static boolean showNotConfig(final ViewDelegate view)
     {
-        logger.info("Attempting to show dialog.");
+        logger.debug("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
         autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
         final JLabel sourceFolderLabel = new JLabel("Source code to analyze:");

@@ -55,7 +55,7 @@ public abstract class EndpointsAction extends JMenuItem {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e)
             {
-                getLogger().info("About to show dialog.");
+                getLogger().debug("About to show dialog.");
                 boolean configured = OptionsDialog.Validate(view);
                 boolean completed = false;
                 ZapPropertiesManager.INSTANCE.getViewSelectedButton().setEnabled(false);
@@ -63,7 +63,7 @@ public abstract class EndpointsAction extends JMenuItem {
 
                 if (configured)
                 {
-                    getLogger().info("configured");
+                    getLogger().debug("configured");
                     EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
                     EndpointDecorator comparePoints[] = null;
                     String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
@@ -77,7 +77,7 @@ public abstract class EndpointsAction extends JMenuItem {
                         if (comparePoints != null && comparePoints.length !=0)
                             endpoints = compareEndpoints(endpoints, comparePoints, view);
                         fillEndpointsToTable(endpoints);
-                        getLogger().info("Got " + endpoints.length + " endpoints.");
+                        getLogger().debug("Got " + endpoints.length + " endpoints.");
 
                         buildNodesFromEndpoints(endpoints, view);
 
@@ -169,7 +169,7 @@ public abstract class EndpointsAction extends JMenuItem {
 
     private void attack (URL url,  ViewDelegate view)
     {
-        getLogger().info("Starting url " + url);
+        getLogger().debug("Starting url " + url);
         if (attackThread != null && attackThread.isAlive()) {
             return;
         }

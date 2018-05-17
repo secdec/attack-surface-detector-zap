@@ -1,10 +1,11 @@
 <zapaddon>
     <name>Attack Surface Detector</name>
     <version>1</version>
-    <semver>1.1.0</semver>
-    <file>attacksurfacedetector-release-1.10.zap</file>
+    <semver>1.0.0</semver>
+    <file>attacksurfacedetector-release-1.0.0.zap</file>
     <status>alpha</status>
-    <description>Source Code Analysis</description>
+    <type>alpha</type>
+    <description>The Attack Surface Detector analyzes web application source code to generate endpoints that can be used for penetration testing.</description>
     <author>Secure Decisions (Matthew DeLetto)</author>
     <url></url>
     <changes>First Version</changes>
@@ -15,6 +16,6 @@
     <pscanrules/>
     <filters/>
     <files></files>
-    <not-before-version>2.4.0</not-before-version>
+    <not-before-version>2.7.0</not-before-version>
     <not-from-version></not-from-version>
 </zapaddon>

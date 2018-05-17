@@ -300,9 +300,9 @@
              <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.owasp.zap</groupId>
+            <groupId>org.zaproxy</groupId>
             <artifactId>zap</artifactId>
-            <version>${zap.version}</version>
+            <version>2.7.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -354,9 +354,9 @@
 
     <properties>
         <zap.extension.name>attacksurfacedetector</zap.extension.name>
-        <zap.extension.type>release</zap.extension.type>
-        <zap.extension.version>1.10</zap.extension.version>
-        <zap.extension.fullname>${zap.extension.name}-${zap.extension.type}-${zap.extension.version}</zap.extension.fullname>
+        <zap.extension.status>alpha</zap.extension.status>
+        <zap.extension.version>1.0.0</zap.extension.version>
+        <zap.extension.fullname>${zap.extension.name}-${zap.extension.status}-${zap.extension.version}</zap.extension.fullname>
 
         <db.name>stonemill</db.name>
 
@@ -391,7 +391,6 @@
         <swing-layout.version>1.0.3</swing-layout.version>
         <tfs-library.version>11.0.0</tfs-library.version>
         <xom.version>1.2.6</xom.version>
-        <zap.version>2.2.2</zap.version>
         <zaphelp.version>2.2.2</zaphelp.version>
 
         <!-- Testing dependency versions -->

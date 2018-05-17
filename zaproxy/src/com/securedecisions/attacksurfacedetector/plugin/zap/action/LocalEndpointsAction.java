@@ -61,7 +61,7 @@ public class LocalEndpointsAction extends EndpointsAction {
 
     public EndpointDecorator[] getEndpoints(String sourceFolder)
     {
-        getLogger().info("Got source information, about to generate endpoints.");
+        getLogger().debug("Got source information, about to generate endpoints.");
         if (sourceFolder== null || sourceFolder.trim().isEmpty())
             return  null;
 
