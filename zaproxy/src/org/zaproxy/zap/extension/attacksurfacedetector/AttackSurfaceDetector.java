@@ -101,7 +101,7 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     public String getDescription()
     {
         logger.debug("Getting Description");
-        return "Source Code Analysis";
+        return "The Attack Surface Detector analyzes web application source code to generate endpoints that can be used for penetration testing.";
     }
 
     @Override
