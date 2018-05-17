@@ -26,6 +26,6 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 1. For Build/install instructions click [here:](https://github.com/secdec/attack-surface-detector-zap/wiki)
 
 
-##License
+## License
 
 Licensed under the [MPL](https://github.com/secdec/attack-surface-detector-zap/blob/master/LICENSE) License.
