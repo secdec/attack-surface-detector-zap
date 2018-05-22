@@ -122,4 +122,7 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     {
         return true;
     }
+
+    @Override
+    public boolean canUnload(){return true;}
 }

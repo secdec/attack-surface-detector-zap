@@ -294,39 +294,9 @@
              <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.owasp.zap</groupId>
-            <artifactId>xom</artifactId>
-            <version>${xom.version}</version>
-             <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.zaproxy</groupId>
             <artifactId>zap</artifactId>
             <version>2.7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.owasp.zap</groupId>
-            <artifactId>zaphelp</artifactId>
-            <version>${zaphelp.version}</version>
-             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.owasp.zap</groupId>
-            <artifactId>java-getopt</artifactId>
-            <version>${java-getopt.version}</version>
-             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.owasp.zap</groupId>
-            <artifactId>jgoodies-looks</artifactId>
-            <version>${jgoodies-looks.version}</version>
-             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.owasp.zap</groupId>
-            <artifactId>lablib-checkboxtree</artifactId>
-            <version>${lablib-checkboxtree.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

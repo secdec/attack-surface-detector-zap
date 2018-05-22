@@ -28,6 +28,7 @@ package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.httpclient.URI;
@@ -43,6 +44,8 @@ import org.parosproxy.paros.network.HttpSender;
 import org.zaproxy.zap.extension.ascan.ExtensionActiveScan;
 import org.zaproxy.zap.extension.spider.ExtensionSpider;
 import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
+import org.zaproxy.zap.extension.spider.SpiderScan;
+import org.zaproxy.zap.model.Target;
 
 import javax.swing.*;
 
@@ -95,7 +98,17 @@ public class AttackThread extends Thread {
                 return;
             }
             if (ZapPropertiesManager.INSTANCE.getAutoSpider())
-                spider(startNode);
+            {
+                try
+                {
+                    spider(startNode);
+                }
+                catch (IllegalStateException ise)
+                {
+                    logger.debug(ise.getMessage());
+                }
+
+            }
             else
             {
                 for (Map.Entry<String, String> node : nodes.entrySet())
@@ -148,46 +161,55 @@ public class AttackThread extends Thread {
         }
         else
         {
-            logger.debug("Starting spider.");
-            if(extension != null)
-                extension.notifyProgress(Progress.SPIDER);
-            startNode.setAllowsChildren(true);
-            for (Map.Entry<String, String> node : nodes.entrySet())
+            try
             {
-                logger.debug("About to call accessNode.");
-                SiteNode childNode = accessNode(new URL(url + node.getKey()), node.getValue());
-                logger.debug("got out of accessNode.");
-                if (childNode != null)
-                    logger.debug("Child node != null, child node is " + childNode);
-                else
-                    logger.debug("child node was null.");
+                logger.debug("Starting spider.");
+                if (extension != null)
+                    extension.notifyProgress(Progress.SPIDER);
+                startNode.setAllowsChildren(true);
+                for (Map.Entry<String, String> node : nodes.entrySet()) {
+                    logger.debug("About to call accessNode.");
+                    SiteNode childNode = accessNode(new URL(url + node.getKey()), node.getValue());
+                    logger.debug("got out of accessNode.");
+                    if (childNode != null)
+                        logger.debug("Child node != null, child node is " + childNode);
+                    else
+                        logger.debug("child node was null.");
+                }
+                logger.debug("about to start the extension. node = " + startNode);
+                logger.debug("child count = " + startNode.getChildCount());
+                Target spiderTarget = new Target(startNode);
+                int id = extSpider.startScan(spiderTarget, null, null);
+                sleep(1500);
+                SpiderScan spiderScan = extSpider.getScan(id);
+                logger.debug("Started the extension.");
+                while (spiderScan.isRunning()) {
+                    sleep(1500);
+                    if (this.stopAttack) {
+                        //extSpider.stopScan(startNode);
+                        extSpider.stopAllScans();
+                        break;
+                    }
+                }
+                if (stopAttack) {
+                    logger.debug("Attack stopped manually");
+                    if (extension != null)
+                        extension.notifyProgress(Progress.STOPPED);
+                    return;
+                }
+                if (stopAttack) {
+                    logger.debug("Attack stopped manually");
+                    if (extension != null)
+                        extension.notifyProgress(Progress.STOPPED);
+                }
+
+               spiderScan.spiderComplete(true);
+
             }
-            logger.debug("about to start the extension. node = " + startNode);
-            logger.debug("child count = " + startNode.getChildCount());
-            extSpider.startScanNode(startNode);
-            logger.debug("Started the extension.");
-        }
-        while (extSpider.getActiveScans()!= null && extSpider.getActiveScans().size() != 0)
-        {
-            if (this.stopAttack)
+            catch (InterruptedException ie)
             {
-                //extSpider.stopScan(startNode);
-                extSpider.stopAllScans();
-                break;
+                logger.debug(ie.getStackTrace());
             }
-        }
-        if (stopAttack)
-        {
-            logger.debug("Attack stopped manually");
-            if(extension != null)
-                extension.notifyProgress(Progress.STOPPED);
-            return;
-        }
-        if (stopAttack)
-        {
-            logger.debug("Attack stopped manually");
-            if(extension != null)
-                extension.notifyProgress(Progress.STOPPED);
         }
     }
 
