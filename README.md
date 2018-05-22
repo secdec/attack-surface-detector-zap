@@ -14,7 +14,7 @@ The Attack Surface Detector uses static code analyses to identify web app endpoi
   * Python / Django
   * Ruby / Rails
 
-To see a brief demonstration for the Attack Surface Detector, you can check it out [here:](https://youtu.be/jUUJNRcmqwI) *Note: this demonstration is based on the plugin built for Portswigger's Burp Suite. Implementation and operation are nearly identical for the ZAP plugin.*
+To see a brief demonstration for the Attack Surface Detector, you can check it out [here:](https://youtu.be/jUUJNRcmqwI) *Note: this demonstration is based on the plugin built for Portswigger's Burp Suite. Implementation and operations are nearly identical for the ZAP plugin.*
 
 
 ## How to Install
