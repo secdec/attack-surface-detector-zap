@@ -183,21 +183,24 @@ public class AttackThread extends Thread {
                 sleep(1500);
                 SpiderScan spiderScan = extSpider.getScan(id);
                 logger.debug("Started the extension.");
-                while (spiderScan.isRunning()) {
+                while (spiderScan.isRunning())
+                {
                     sleep(1500);
-                    if (this.stopAttack) {
-                        //extSpider.stopScan(startNode);
-                        extSpider.stopAllScans();
+                    if (this.stopAttack)
+                    {
+                        extSpider.stopScan(id);
                         break;
                     }
                 }
-                if (stopAttack) {
+                if (stopAttack)
+                {
                     logger.debug("Attack stopped manually");
                     if (extension != null)
                         extension.notifyProgress(Progress.STOPPED);
                     return;
                 }
-                if (stopAttack) {
+                if (stopAttack)
+                {
                     logger.debug("Attack stopped manually");
                     if (extension != null)
                         extension.notifyProgress(Progress.STOPPED);
