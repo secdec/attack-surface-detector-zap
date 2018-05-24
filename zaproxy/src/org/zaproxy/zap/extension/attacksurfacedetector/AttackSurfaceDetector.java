@@ -28,6 +28,7 @@ package org.zaproxy.zap.extension.attacksurfacedetector;
 
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
 import org.apache.log4j.Logger;
+import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ExtensionAdaptor;
 import org.parosproxy.paros.extension.ExtensionHook;
@@ -44,6 +45,7 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     JTabbedPane tabbedPane;
     JCheckBox autoSpiderField;
     private static final Logger logger = Logger.getLogger(AttackSurfaceDetector.class);
+    public static final String NAME = "AttackSurfaceDetector";
     static { logger.debug("Loading Class"); }
 
     public AttackSurfaceDetector()
@@ -64,7 +66,12 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
     private void initialize()
     {
         logger.debug("Initialize");
-        this.setName("Attack Surface Detector");
+        this.setName(NAME);
+    }
+
+    @Override
+    public String getUIName() {
+        return Constant.messages.getString("attacksurfacedetector.name");
     }
 
     @Override
