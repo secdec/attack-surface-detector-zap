@@ -43,16 +43,10 @@ package org.zaproxy.zap.extension.attacksurfacedetector;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.swing.*;
 
@@ -63,7 +57,6 @@ import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.AttackThread;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
 import com.securedecisions.attacksurfacedetector.plugin.zap.dialog.OptionsDialog;
-import org.apache.commons.io.FileUtils;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
@@ -82,13 +75,7 @@ import static com.securedecisions.attacksurfacedetector.plugin.zap.action.Endpoi
  */
 public class AttackSurfaceDetectorPanel extends AbstractPanel{
     private static final long serialVersionUID = 1L;
-    private javax.swing.JScrollPane scrollLog = null;
-    private javax.swing.JPanel attackSurfaceDetectorPanel = null;
     private javax.swing.JToolBar panelToolbar = null;
-    private JLabel filterStatus = null;
-    private JButton stopScanButton;
-    private JButton startScanButton;
-    private JButton optionsButton = null;
     private ViewDelegate view = null;
     private JButton viewSelectedButton;
     private Model model;
