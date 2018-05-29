@@ -89,6 +89,8 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         this.model = model;
         this.view = view;
         initialize();
+        ImageIcon SECDEC_ICON = new ImageIcon(AttackSurfaceDetector.class.getResource("/org/zaproxy/zap/extension/attacksurfacedetector/resources/secdec-S-16x16.png"));
+        this.setIcon(SECDEC_ICON);
     }
 
     private  void initialize()
