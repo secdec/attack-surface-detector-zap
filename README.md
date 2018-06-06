@@ -19,11 +19,15 @@ To see a brief demonstration for the Attack Surface Detector, you can check it o
 
 ## How to Install
 
-1.	Download and install the latest build of OWASP ZAP from https://github.com/zaproxy/zaproxy/wiki/Downloads
-2.	Launch application
+1.	Download and install the latest build of OWASP ZAP from [https://github.com/zaproxy/zaproxy/wiki/Downloads](https://github.com/zaproxy/zaproxy/wiki/Downloads)
+2.	Download latest Attask Surface Detector Zap addon file from [https://github.com/secdec/attack-surface-detector-zap/releases](https://github.com/secdec/attack-surface-detector-zap/releases)
+3.  Launch OWASP ZAP
+4.  Navigate to File->Load Add-on File
+5.  Locate the Attack Surface Detector Zap file
+6.  Click open
 
 ### Installing the Plugin
-1. For Build/install instructions click [here](https://github.com/secdec/attack-surface-detector-zap/wiki).
+1. [Detailed Build/install instructions](https://github.com/secdec/attack-surface-detector-zap/wiki).
 
 
 ## License
