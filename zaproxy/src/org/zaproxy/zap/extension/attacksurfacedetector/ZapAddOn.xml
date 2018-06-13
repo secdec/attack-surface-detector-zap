@@ -1,6 +1,6 @@
 <zapaddon>
     <name>Attack Surface Detector</name>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <status>alpha</status>
     <description>The Attack Surface Detector analyzes web application source code to generate endpoints that can be used for penetration testing.</description>
     <author>Secure Decisions (Matthew DeLetto)</author>
