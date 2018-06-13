@@ -16,18 +16,19 @@ The Attack Surface Detector uses static code analyses to identify web app endpoi
 
 To see a brief demonstration for the Attack Surface Detector, you can check it out [here:](https://youtu.be/jUUJNRcmqwI) *Note: this demonstration is based on the plugin built for Portswigger's Burp Suite. Implementation and operations are nearly identical for the ZAP plugin.*
 
+## Installing the Plugin
+1. [Detailed install instructions](https://github.com/secdec/attack-surface-detector-zap/wiki/Installation).
 
-## How to Install
 
-1.	Download and install the latest build of OWASP ZAP from [https://github.com/zaproxy/zaproxy/wiki/Downloads](https://github.com/zaproxy/zaproxy/wiki/Downloads)
-2.	Download latest Attack Surface Detector Zap addon file from [https://github.com/secdec/attack-surface-detector-zap/releases](https://github.com/secdec/attack-surface-detector-zap/releases)
-3.  Launch OWASP ZAP
-4.  Navigate to File->Load Add-on File
-5.  Locate the Attack Surface Detector Zap file
-6.  Click open
+# For Developers & Contributors
 
-### Installing the Plugin
-1. [Detailed Build/install instructions](https://github.com/secdec/attack-surface-detector-zap/wiki).
+## Build Instructions
+1.  Install Maven. - [https://maven.apache.org/install.html](https://maven.apache.org/install.html)
+2. Clone Attack Surface Detector repository - https://github.com/secdec/attack-surface-detector-zap 
+3. Navigate to the Source Code Directory
+4. Open a new terminal and run the command `mvn clean package`
+4. The plugin will be located in the target folder named attacksurfacedetector-release-#.zap
+
 
 
 ## License
