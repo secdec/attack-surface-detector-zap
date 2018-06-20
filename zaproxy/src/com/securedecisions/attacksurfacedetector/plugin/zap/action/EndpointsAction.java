@@ -63,34 +63,42 @@ public abstract class EndpointsAction extends JMenuItem {
 
                 if (configured)
                 {
-                    getLogger().debug("configured");
-                    EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
-                    EndpointDecorator comparePoints[] = null;
-                    String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
-                    if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
-                        comparePoints = getEndpoints(oldSourceFolder);
+                    try
+                    {
+                        EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                        EndpointDecorator comparePoints[] = null;
+                        String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
+                        if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
+                            comparePoints = getEndpoints(oldSourceFolder);
 
-                    if ((endpoints == null) || (endpoints.length == 0))
-	                	view.showWarningDialog(getNoEndpointsMessage());
-	                else
-	                {
-                        if (comparePoints != null && comparePoints.length !=0)
-                            endpoints = compareEndpoints(endpoints, comparePoints, view);
-                        fillEndpointsToTable(endpoints);
-                        getLogger().debug("Got " + endpoints.length + " endpoints.");
-
-                        buildNodesFromEndpoints(endpoints, view);
-
-		                String url = ZapPropertiesManager.INSTANCE.getTargetUrl();
-                        if (url != null)
-                        { // cancel not pressed
-                            completed = attackUrl(url, view);
-                            if (!completed)
-                                view.showWarningDialog("Invalid URL.");
-                        }
+                        if ((endpoints == null) || (endpoints.length == 0))
+                            view.showWarningDialog(getNoEndpointsMessage());
                         else
-                            view.showMessageDialog(getCompletedMessage());
-	                }
+                        {
+                            if (comparePoints != null && comparePoints.length !=0)
+                                endpoints = compareEndpoints(endpoints, comparePoints, view);
+                            fillEndpointsToTable(endpoints);
+                            getLogger().debug("Got " + endpoints.length + " endpoints.");
+
+                            buildNodesFromEndpoints(endpoints, view);
+
+                            String url = ZapPropertiesManager.INSTANCE.getTargetUrl();
+                            if (url != null)
+                            { // cancel not pressed
+                                completed = attackUrl(url, view);
+                                if (!completed)
+                                    view.showWarningDialog("Invalid URL.");
+                            }
+                            else
+                                view.showMessageDialog(getCompletedMessage());
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        getLogger().debug(ex.getStackTrace());
+                        JOptionPane.showMessageDialog(view.getMainFrame(), "An error occurred processing input. See zap.log for more details");
+                    }
                 }
                 if (completed)
                 {

@@ -57,6 +57,7 @@ import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.AttackThread;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
 import com.securedecisions.attacksurfacedetector.plugin.zap.dialog.OptionsDialog;
+import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
@@ -81,6 +82,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
     private Model model;
     private AttackThread attackThread = null;
     Map<String, String> nodes = new HashMap<String, String>();
+    private static final Logger LOGGER = Logger.getLogger(AttackSurfaceDetectorPanel.class);
 
     public AttackSurfaceDetectorPanel(ViewDelegate view, final Model model)
     {
@@ -154,31 +156,40 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
                 ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
                 if (configured)
                 {
-                    EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
-                    EndpointDecorator comparePoints[] = null;
-                    String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
-                    if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
-                        comparePoints = getEndpoints(oldSourceFolder);
-
-                    if ((endpoints == null) || (endpoints.length == 0))
-                        view.showWarningDialog("Failed to retrieve endpoints from the source. Check your inputs.");
-                    else
+                    try
                     {
-                        if (comparePoints != null && comparePoints.length !=0)
-                            endpoints = compareEndpoints(endpoints, comparePoints, view);
+                        EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                        EndpointDecorator comparePoints[] = null;
+                        String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
+                        if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
+                            comparePoints = getEndpoints(oldSourceFolder);
 
-                        fillEndpointsToTable(endpoints);
-                        buildNodesFromEndpoints(endpoints);
-                        String url = ZapPropertiesManager.INSTANCE.getTargetUrl();
-                        if (url != null)
-                        { // cancel not pressed
-                            completed = attackUrl(url, view);
-                            if (!completed)
-                                view.showWarningDialog("Invalid URL.");
-                        }
+                        if ((endpoints == null) || (endpoints.length == 0))
+                            view.showWarningDialog("Failed to retrieve endpoints from the source. Check your inputs.");
                         else
-                            view.showMessageDialog("The endpoints were successfully generated from source.");
+                        {
+                            if (comparePoints != null && comparePoints.length !=0)
+                                endpoints = compareEndpoints(endpoints, comparePoints, view);
+
+                            fillEndpointsToTable(endpoints);
+                            buildNodesFromEndpoints(endpoints);
+                            String url = ZapPropertiesManager.INSTANCE.getTargetUrl();
+                            if (url != null)
+                            { // cancel not pressed
+                                completed = attackUrl(url, view);
+                                if (!completed)
+                                    view.showWarningDialog("Invalid URL.");
+                            }
+                            else
+                                view.showMessageDialog("The endpoints were successfully generated from source.");
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        LOGGER.debug(ex.getStackTrace());
+                        JOptionPane.showMessageDialog(view.getMainFrame(), "An error occurred processing input. See zap.log for more details");
+                }
+
                 }
                 if (completed)
                     view.showMessageDialog("The endpoints were successfully generated from source.");

@@ -340,10 +340,11 @@
     </dependencies>
 
     <properties>
-        <zap.extension.name>attacksurfacedetector</zap.extension.name>
-        <zap.extension.status>alpha</zap.extension.status>
-        <zap.extension.version>1.1.1</zap.extension.version>
-        <zap.extension.fullname>${zap.extension.name}-${zap.extension.status}-${zap.extension.version}</zap.extension.fullname>
+        <zap.addon.name>attacksurfacedetector</zap.addon.name>
+        <zap.addon.version>1.1.1</zap.addon.version>
+        <zap.addon.status>alpha</zap.addon.status>
+        <zap.addon.not-before-version>2.7.0</zap.addon.not-before-version>
+        <zap.extension.fullname>${zap.addon.name}-${zap.addon.status}-${zap.addon.version}</zap.extension.fullname>
 
         <db.name>stonemill</db.name>
 
