@@ -64,7 +64,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     @Override
     public String getKey() {
         String key = getProperties().getProperty(API_KEY_KEY);
-        logger.debug("returning api key " + key);
         return key;
     }
 
@@ -95,13 +94,11 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     public String getSourceFolder()
     {
         String sourceFolder = getProperties().getProperty(SOURCE_FOLDER_KEY);
-        logger.debug("returning source code folder " + sourceFolder);
         return sourceFolder;
     }
     public String getOldSourceFolder()
     {
         String oldSourceFolder = getProperties().getProperty(OLD_SOURCE_FOLDER_KEY);
-        logger.debug("returning old source code folder " + oldSourceFolder);
         return oldSourceFolder;
     }
 
@@ -109,21 +106,18 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     public String getTargetHost()
     {
         String targetHost = getProperties().getProperty(HOST_KEY);
-        logger.debug("returning targetHost " + targetHost);
         return targetHost;
     }
 
     public String getTargetPort()
     {
         String targetPort = getProperties().getProperty(PORT_KEY);
-        logger.debug("returning targetPort " + targetPort);
         return targetPort;
     }
 
     public String getTargetPath()
     {
         String sourceFolder = getProperties().getProperty(PATH_KEY);
-        logger.debug("returning targetPath " + sourceFolder);
         return sourceFolder;
     }
 
@@ -131,7 +125,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     {
         String autoSpider = getProperties().getProperty(AUTO_SPIDER_KEY);
         boolean shouldSpider = Boolean.parseBoolean(autoSpider);
-        logger.debug("returning autospider " + autoSpider + "(should spider? " + shouldSpider + ")");
         return shouldSpider;
     }
 
@@ -139,7 +132,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     {
         String useHttps = getProperties().getProperty(HTTPS_KEY);
         boolean shouldUseHttps = Boolean.parseBoolean(useHttps);
-        logger.debug("returning useHttps " + useHttps + "(should use https? " + shouldUseHttps +")");
         return shouldUseHttps;
     }
 
@@ -225,10 +217,8 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     {
         Properties properties = new Properties();
         File file = new File(Constant.getZapHome(), FILE_NAME);
-        logger.info("Properties file is at " + file.getAbsolutePath());
         if (!file.exists()) {
             try {
-                logger.info("Creating new file.");
                 file.createNewFile();
             } catch (IOException e) {
                 logger.warn("Failed trying to initialize properties file.", e);
@@ -238,7 +228,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         {
             try (FileReader reader = new FileReader(file)) {
                 properties.load(reader);
-                logger.info("Successfully loaded properties.");
             } catch (IOException e) {
                 logger.warn("Failed attempting to load from properties file.", e);
             }
