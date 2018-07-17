@@ -41,12 +41,20 @@ public class OptionsDialog {
     static boolean https;
     static boolean autoSpider;
 
-    public static boolean Validate(final ViewDelegate view)
+    public static boolean ValidateSource(final ViewDelegate view)
     {
        if (ZapPropertiesManager.INSTANCE.getTargetUrl() != null && !(ZapPropertiesManager.INSTANCE.getSourceFolder() == null || ZapPropertiesManager.INSTANCE.getSourceFolder().isEmpty()))
           return true;
        else
-            return showNotConfig(view);
+            return showNotConfigS(view);
+    }
+
+    public static boolean ValidateJson(final ViewDelegate view)
+    {
+        if (ZapPropertiesManager.INSTANCE.getTargetUrl() != null && !(ZapPropertiesManager.INSTANCE.getJsonFile() == null || ZapPropertiesManager.INSTANCE.getJsonFile().isEmpty()))
+            return true;
+        else
+            return showNotConfigE(view);
     }
 
    public static boolean show(final ViewDelegate view)
@@ -128,6 +136,55 @@ public class OptionsDialog {
            }
        });
 
+       final JLabel jsonFileLabel = new JLabel("Endpoint JSON to analyze:");
+       final JTextField jsonFileField = new JTextField(40);
+       jsonFileField.setText(ZapPropertiesManager.INSTANCE.getJsonFile());
+       final JButton jsonButton = new JButton("Browse");
+       jsonButton.addActionListener(new java.awt.event.ActionListener()
+       {
+           @Override
+           public void actionPerformed(java.awt.event.ActionEvent e)
+           {
+               JFileChooser chooser = new JFileChooser();
+               String currentDirectory = jsonFileField.getText();
+               if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
+                   currentDirectory = System.getProperty("user.home");
+               }
+               chooser.setCurrentDirectory(new java.io.File(currentDirectory));
+               chooser.setDialogTitle("Select endpoint JSON file");
+               chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+               chooser.setAcceptAllFileFilterUsed(false);
+               chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.json | JSON File", "json"));
+
+               if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
+                   jsonFileField.setText(chooser.getSelectedFile().getAbsolutePath());
+           }
+       });
+
+       final JLabel oldJsonFileLabel = new JLabel("Comparison endpoint JSON (optional):");
+       final JTextField oldJsonFileField = new JTextField(40);
+       oldJsonFileField.setText(ZapPropertiesManager.INSTANCE.getOldJsonFile());
+       final JButton oldJsonBrowseButton = new JButton("Browse");
+       oldJsonBrowseButton.addActionListener(new java.awt.event.ActionListener()
+       {
+           @Override
+           public void actionPerformed(java.awt.event.ActionEvent e)
+           {
+               JFileChooser oldChooser = new JFileChooser();
+               String currentDirectory = oldJsonFileField.getText();
+               if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
+                   currentDirectory = System.getProperty("user.home");
+               }
+               oldChooser.setCurrentDirectory(new java.io.File(currentDirectory));
+               oldChooser.setDialogTitle("Select endpoint JSON file");
+               oldChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+               oldChooser.setAcceptAllFileFilterUsed(false);
+               oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.json | JSON File", "json"));
+               if (oldChooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
+                   oldJsonFileField.setText(oldChooser.getSelectedFile().getAbsolutePath());
+           }
+       });
+
         JLabel hostLabel = new JLabel("Host:");
         JTextField hostField = new JTextField(40);
         hostField.setText(ZapPropertiesManager.INSTANCE.getTargetHost());
@@ -167,24 +224,26 @@ public class OptionsDialog {
         };
         autoSpiderField.addActionListener(applicationCheckBoxSpiderActionListener);
 
+        int y = 0;
+
         GridBagLayout experimentLayout = new GridBagLayout();
         GridBagConstraints labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
-        labelConstraints.gridy = 0;
+        labelConstraints.gridy = y;
         labelConstraints.weightx = 1;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         GridBagConstraints textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 0;
+        textBoxConstraints.gridy = y;
         textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         GridBagConstraints browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
         browseButtonConstraints.gridx = 5;
-        browseButtonConstraints.gridy = 0;
+        browseButtonConstraints.gridy = y++;
         browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         JPanel myPanel = new JPanel();
@@ -196,24 +255,68 @@ public class OptionsDialog {
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
-        labelConstraints.gridy = 1;
+        labelConstraints.gridy = y;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 1;
+        textBoxConstraints.gridy = y;
         textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
         browseButtonConstraints.gridx = 5;
-        browseButtonConstraints.gridy = 1;
+        browseButtonConstraints.gridy = y++;
         browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         myPanel.add(oldSourceFolderLabel, labelConstraints);
         myPanel.add(oldSourceFolderField, textBoxConstraints);
         myPanel.add(oldBrowseButton, browseButtonConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = y;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = y;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = y++;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(jsonFileLabel, labelConstraints);
+        myPanel.add(jsonFileField, textBoxConstraints);
+        myPanel.add(jsonButton, browseButtonConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = y;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = y;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = y++;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(oldJsonFileLabel, labelConstraints);
+        myPanel.add(oldJsonFileField, textBoxConstraints);
+        myPanel.add(oldJsonBrowseButton, browseButtonConstraints);
 
         GridBagLayout mainLayout = new GridBagLayout();
         JPanel basePanel = new JPanel(mainLayout);
@@ -224,19 +327,19 @@ public class OptionsDialog {
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
-        labelConstraints.gridy = 2;
+        labelConstraints.gridy = y;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 2;
+        textBoxConstraints.gridy = y;
         textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
         browseButtonConstraints.gridx = 5;
-        browseButtonConstraints.gridy = 2;
+        browseButtonConstraints.gridy = y++;
         browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         myPanel.add(hostLabel, labelConstraints);
@@ -245,19 +348,19 @@ public class OptionsDialog {
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
-        labelConstraints.gridy = 3;
+        labelConstraints.gridy = y;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 3;
+        textBoxConstraints.gridy = y;
         textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
         browseButtonConstraints.gridx = 5;
-        browseButtonConstraints.gridy = 3;
+        browseButtonConstraints.gridy = y++;
         browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         myPanel.add(portLabel, labelConstraints);
@@ -266,19 +369,19 @@ public class OptionsDialog {
         labelConstraints = new GridBagConstraints();
         labelConstraints.gridwidth = 1;
         labelConstraints.gridx = 0;
-        labelConstraints.gridy = 4;
+        labelConstraints.gridy = y;
         labelConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         textBoxConstraints = new GridBagConstraints();
         textBoxConstraints.gridwidth = 4;
         textBoxConstraints.gridx = 1;
-        textBoxConstraints.gridy = 4;
+        textBoxConstraints.gridy = y;
         textBoxConstraints.anchor = GridBagConstraints.WEST;
 
         browseButtonConstraints = new GridBagConstraints();
         browseButtonConstraints.gridwidth = 1;
         browseButtonConstraints.gridx = 5;
-        browseButtonConstraints.gridy = 4;
+        browseButtonConstraints.gridy = y++;
         browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         myPanel.add(pathLabel, labelConstraints);
@@ -341,6 +444,8 @@ public class OptionsDialog {
             ZapPropertiesManager.setAutoSpider(autoSpider);
             ZapPropertiesManager.setSourceFolder(sourceFolderField.getText());
             ZapPropertiesManager.setOldSourceFolder(oldSourceFolderField.getText());
+            ZapPropertiesManager.setJsonFile(jsonFileField.getText());
+            ZapPropertiesManager.setOldJsonFile(oldJsonFileField.getText());
 
             return true;
         }
@@ -350,7 +455,7 @@ public class OptionsDialog {
             return false;
     }
 
-    public static boolean showNotConfig(final ViewDelegate view)
+    public static boolean showNotConfigS(final ViewDelegate view)
     {
         logger.debug("Attempting to show dialog.");
         https = ZapPropertiesManager.INSTANCE.getUseHttps();
@@ -431,7 +536,7 @@ public class OptionsDialog {
 
         JLabel warningLabel = new JLabel();
         if(ZapPropertiesManager.INSTANCE.getSourceFolder() == null || ZapPropertiesManager.INSTANCE.getSourceFolder().isEmpty())
-            warningLabel.setText("Source code is required to import endpoints");
+            warningLabel.setText("Source code is required to import endpoints from source");
         else
             warningLabel.setText("URL configuration is required to populate the site map with the detected endpoints");
         JPanel warningPanel = new JPanel();
@@ -655,11 +760,302 @@ public class OptionsDialog {
             ZapPropertiesManager.setUseHttps(https);
             ZapPropertiesManager.setAutoSpider(autoSpider);
             ZapPropertiesManager.setSourceFolder(sourceFolderField.getText());
+            ZapPropertiesManager.setOldSourceFolder(oldSourceFolderField.getText());
 
             return true;
         }
         else if(result == JOptionPane.NO_OPTION)
-            return showNotConfig(view);
+            return showNotConfigS(view);
+        else
+            return false;
+    }
+
+    public static boolean showNotConfigE(final ViewDelegate view)
+    {
+        logger.debug("Attempting to show dialog.");
+        https = ZapPropertiesManager.INSTANCE.getUseHttps();
+        autoSpider = ZapPropertiesManager.INSTANCE.getAutoSpider();
+        final JLabel jsonFileLabel = new JLabel("Endpoint JSON to analyze:");
+        final JTextField jsonFileField = new JTextField(40);
+        jsonFileField.setText(ZapPropertiesManager.INSTANCE.getJsonFile());
+        final JButton jsonButton = new JButton("Browse");
+        jsonButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e)
+            {
+                JFileChooser chooser = new JFileChooser();
+                String currentDirectory = jsonFileField.getText();
+                if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
+                    currentDirectory = System.getProperty("user.home");
+                }
+                chooser.setCurrentDirectory(new java.io.File(currentDirectory));
+                chooser.setDialogTitle("Select endpoint JSON file");
+                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setAcceptAllFileFilterUsed(false);
+                chooser.addChoosableFileFilter( new FileNameExtensionFilter("*.json | JSON File", "json"));
+
+                if (chooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
+                    jsonFileField.setText(chooser.getSelectedFile().getAbsolutePath());
+            }
+        });
+
+        final JLabel oldJsonFileLabel = new JLabel("Comparison endpoint JSON (optional):");
+        final JTextField oldJsonFileField = new JTextField(40);
+        oldJsonFileField.setText(ZapPropertiesManager.INSTANCE.getOldJsonFile());
+        final JButton oldJsonBrowseButton = new JButton("Browse");
+        oldJsonBrowseButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e)
+            {
+                JFileChooser oldChooser = new JFileChooser();
+                String currentDirectory = oldJsonFileField.getText();
+                if ((currentDirectory == null) || (currentDirectory.trim().equals(""))) {
+                    currentDirectory = System.getProperty("user.home");
+                }
+                oldChooser.setCurrentDirectory(new java.io.File(currentDirectory));
+                oldChooser.setDialogTitle("Select endpoint JSON file");
+                oldChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                oldChooser.setAcceptAllFileFilterUsed(false);
+                oldChooser.addChoosableFileFilter( new FileNameExtensionFilter("*.json | JSON File", "json"));
+                if (oldChooser.showOpenDialog(view.getMainFrame()) == JFileChooser.APPROVE_OPTION)
+                    oldJsonFileField.setText(oldChooser.getSelectedFile().getAbsolutePath());
+            }
+        });
+
+        JLabel warningLabel = new JLabel();
+        if(ZapPropertiesManager.INSTANCE.getJsonFile() == null || ZapPropertiesManager.INSTANCE.getJsonFile().isEmpty())
+            warningLabel.setText("JSON file is required to import endpoints from Attack Surface Detector CLI");
+        else
+            warningLabel.setText("URL configuration is required to populate the site map with the detected endpoints");
+        JPanel warningPanel = new JPanel();
+        warningPanel.add(warningLabel);
+
+        JLabel hostLabel = new JLabel("Host:");
+        JTextField hostField = new JTextField(40);
+        hostField.setText(ZapPropertiesManager.INSTANCE.getTargetHost());
+
+        JLabel portLabel = new JLabel("Port:");
+        JTextField portField = new JTextField(40);
+        portField.setText(ZapPropertiesManager.INSTANCE.getTargetPort());
+        PlainDocument portDoc = (PlainDocument)portField.getDocument();
+        portDoc.setDocumentFilter(new PortFilter());
+
+        JLabel pathLabel = new JLabel("Path (optional):");
+        JTextField pathField = new JTextField(40);
+        pathField.setText(ZapPropertiesManager.INSTANCE.getTargetPath());
+
+        JLabel httpsLabel = new JLabel("Use HTTPS");
+        JCheckBox httpsField = new JCheckBox();
+        httpsField.setSelected(https);
+
+        ActionListener applicationCheckBoxHttpActionListener = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                https = httpsField.isSelected();
+            }
+        };
+
+        httpsField.addActionListener(applicationCheckBoxHttpActionListener);
+        JLabel autoSpiderLabel = new JLabel("Automatically start spider after importing endpoints");
+        JCheckBox autoSpiderField = new JCheckBox();
+        autoSpiderField.setSelected(autoSpider);
+        ActionListener applicationCheckBoxSpiderActionListener = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                autoSpider = autoSpiderField.isSelected();
+            }
+        };
+        autoSpiderField.addActionListener(applicationCheckBoxSpiderActionListener);
+
+        GridBagLayout experimentLayout = new GridBagLayout();
+        GridBagConstraints labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 0;
+        labelConstraints.weightx = 1;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        GridBagConstraints textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 0;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+
+        GridBagConstraints browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 0;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(experimentLayout);
+        myPanel.add(jsonFileLabel, labelConstraints);
+        myPanel.add(jsonFileField, textBoxConstraints);
+        myPanel.add(jsonButton, browseButtonConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 1;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 1;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 1;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(oldJsonFileLabel, labelConstraints);
+        myPanel.add(oldJsonFileField, textBoxConstraints);
+        myPanel.add(oldJsonBrowseButton, browseButtonConstraints);
+
+        GridBagLayout mainLayout = new GridBagLayout();
+        JPanel basePanel = new JPanel(mainLayout);
+
+        GridBagLayout optionsLayout = new GridBagLayout();
+        JPanel optionsPanel = new JPanel(optionsLayout);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 2;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 2;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 2;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(hostLabel, labelConstraints);
+        myPanel.add(hostField, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 3;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 3;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 3;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(portLabel, labelConstraints);
+        myPanel.add(portField, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 4;
+        labelConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 4;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+
+        browseButtonConstraints = new GridBagConstraints();
+        browseButtonConstraints.gridwidth = 1;
+        browseButtonConstraints.gridx = 5;
+        browseButtonConstraints.gridy = 4;
+        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
+
+        myPanel.add(pathLabel, labelConstraints);
+        myPanel.add(pathField, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 0;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 0;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+        textBoxConstraints.weightx = 1;
+
+        optionsPanel.add(httpsField, labelConstraints);
+        optionsPanel.add(httpsLabel, textBoxConstraints);
+
+        labelConstraints = new GridBagConstraints();
+        labelConstraints.gridwidth = 1;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 1;
+
+        textBoxConstraints = new GridBagConstraints();
+        textBoxConstraints.gridwidth = 4;
+        textBoxConstraints.gridx = 1;
+        textBoxConstraints.gridy = 1;
+        textBoxConstraints.anchor = GridBagConstraints.WEST;
+        textBoxConstraints.weightx = 1;
+
+        optionsPanel.add(autoSpiderField, labelConstraints);
+        optionsPanel.add(autoSpiderLabel, textBoxConstraints);
+
+        GridBagConstraints panelConstraints = new GridBagConstraints();
+        panelConstraints.gridwidth = 1;
+        panelConstraints.gridx = 0;
+        panelConstraints.gridy = 0;
+        panelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        basePanel.add(warningPanel, panelConstraints);
+
+        panelConstraints = new GridBagConstraints();
+        panelConstraints.gridwidth = 1;
+        panelConstraints.gridx = 0;
+        panelConstraints.gridy = 1;
+        basePanel.add(myPanel, panelConstraints);
+
+        panelConstraints = new GridBagConstraints();
+        panelConstraints.gridwidth = 1;
+        panelConstraints.gridx = 0;
+        panelConstraints.gridy = 2;
+        panelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        basePanel.add(optionsPanel, panelConstraints);
+
+        Object[] options1 = { "Submit", "Reset", "Cancel" };
+        int result = JOptionPane.showOptionDialog(view.getMainFrame(), basePanel, "Attack Surface Detector",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options1, null);
+        if (result == JOptionPane.YES_OPTION)
+        {
+            ZapPropertiesManager.setTargetHost(hostField.getText());
+            ZapPropertiesManager.setTargetPath(pathField.getText());
+            ZapPropertiesManager.setTargetPort(portField.getText());
+            ZapPropertiesManager.setUseHttps(https);
+            ZapPropertiesManager.setAutoSpider(autoSpider);
+            ZapPropertiesManager.setJsonFile(jsonFileField.getText());
+            ZapPropertiesManager.setOldJsonFile(oldJsonFileField.getText());
+
+            return true;
+        }
+        else if(result == JOptionPane.NO_OPTION)
+            return showNotConfigE(view);
         else
             return false;
     }

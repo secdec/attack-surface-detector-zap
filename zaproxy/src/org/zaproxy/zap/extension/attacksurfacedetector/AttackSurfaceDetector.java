@@ -26,6 +26,7 @@
 
 package org.zaproxy.zap.extension.attacksurfacedetector;
 
+import com.securedecisions.attacksurfacedetector.plugin.zap.action.JsonEndpointAction;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.Constant;
@@ -40,6 +41,7 @@ import java.util.ResourceBundle;
 
 public class AttackSurfaceDetector extends ExtensionAdaptor {
     private LocalEndpointsAction localEndpointsAction = null;
+    private JsonEndpointAction jsonEndpointAction = null;
     private ResourceBundle messages = null;
     private AbstractPanel statusPanel;
     JTabbedPane tabbedPane;
@@ -82,6 +84,7 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
         if (getView() != null)
         {
             extensionHook.getHookMenu().addToolsMenuItem(getLocalEndpointsAction());
+            extensionHook.getHookMenu().addToolsMenuItem(getJsonEndpointAction());
             extensionHook.getHookView().addStatusPanel(new AttackSurfaceDetectorPanel(getView(), getModel()));
         }
     }
@@ -93,6 +96,15 @@ public class AttackSurfaceDetector extends ExtensionAdaptor {
             localEndpointsAction = new LocalEndpointsAction(getView(), getModel());
 
         return localEndpointsAction;
+    }
+
+    public JsonEndpointAction getJsonEndpointAction()
+    {
+        logger.debug("Getting menu");
+        if (jsonEndpointAction == null)
+            jsonEndpointAction = new JsonEndpointAction(getView(), getModel());
+
+        return jsonEndpointAction;
     }
 
     public String getMessageString(String key) { return messages.getString(key); }

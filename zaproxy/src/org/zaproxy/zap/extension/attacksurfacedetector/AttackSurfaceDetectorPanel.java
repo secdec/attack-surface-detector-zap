@@ -43,6 +43,10 @@ package org.zaproxy.zap.extension.attacksurfacedetector;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -53,6 +57,7 @@ import javax.swing.*;
 import com.denimgroup.threadfix.data.enums.ParameterDataType;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabase;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabaseFactory;
+import com.denimgroup.threadfix.framework.engine.full.EndpointSerialization;
 import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.AttackThread;
 import com.securedecisions.attacksurfacedetector.plugin.zap.action.LocalEndpointsAction;
@@ -140,17 +145,17 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         panelToolbar.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
         panelToolbar.setName("Attack Surface Detector");
 
-        JButton importButton = new JButton("Import Endpoints from Source");
         viewSelectedButton = new JButton("View Selected");
         viewSelectedButton.setEnabled(false);
         ZapPropertiesManager.INSTANCE.setViewSelectedButton(viewSelectedButton);
         JButton optionsButton = new JButton("Options");
-        importButton.addActionListener(new java.awt.event.ActionListener()
+        JButton importFromSourceButton = new JButton("Import Endpoints from Source");
+        importFromSourceButton.addActionListener(new java.awt.event.ActionListener()
         {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e)
             {
-                boolean configured = OptionsDialog.Validate(view);
+                boolean configured = OptionsDialog.ValidateSource(view);
                 boolean completed = false;
                 viewSelectedButton.setEnabled(false);
                 ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
@@ -158,11 +163,11 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
                 {
                     try
                     {
-                        EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                        EndpointDecorator[] endpoints = getEndpointsFromSource(ZapPropertiesManager.INSTANCE.getSourceFolder());
                         EndpointDecorator comparePoints[] = null;
                         String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
                         if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
-                            comparePoints = getEndpoints(oldSourceFolder);
+                            comparePoints = getEndpointsFromSource(oldSourceFolder);
 
                         if ((endpoints == null) || (endpoints.length == 0))
                             view.showWarningDialog("Failed to retrieve endpoints from the source. Check your inputs.");
@@ -195,6 +200,59 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
                     view.showMessageDialog("The endpoints were successfully generated from source.");
             }
         });
+
+        JButton importFromJsonButton = new JButton("Import Endpoints from CLI JSON");
+        importFromJsonButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e)
+            {
+                boolean configured = OptionsDialog.ValidateJson(view);
+                boolean completed = false;
+                viewSelectedButton.setEnabled(false);
+                ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
+                if (configured)
+                {
+                    try
+                    {
+                        EndpointDecorator[] endpoints = getEndpointsFromJson(ZapPropertiesManager.INSTANCE.getJsonFile());
+                        EndpointDecorator comparePoints[] = null;
+                        String oldJsonFile = ZapPropertiesManager.INSTANCE.getOldJsonFile();
+                        if(oldJsonFile != null && !oldJsonFile.isEmpty())
+                            comparePoints = getEndpointsFromJson(oldJsonFile);
+
+                        if ((endpoints == null) || (endpoints.length == 0))
+                            view.showWarningDialog("Failed to retrieve endpoints from the source. Check your inputs.");
+                        else
+                        {
+                            if (comparePoints != null && comparePoints.length !=0)
+                                endpoints = compareEndpoints(endpoints, comparePoints, view);
+
+                            fillEndpointsToTable(endpoints);
+                            buildNodesFromEndpoints(endpoints);
+                            String url = ZapPropertiesManager.INSTANCE.getTargetUrl();
+                            if (url != null)
+                            { // cancel not pressed
+                                completed = attackUrl(url, view);
+                                if (!completed)
+                                    view.showWarningDialog("Invalid URL.");
+                            }
+                            else
+                                view.showMessageDialog("The endpoints were successfully generated from source.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LOGGER.debug(ex.getStackTrace());
+                        JOptionPane.showMessageDialog(view.getMainFrame(), "An error occurred processing input. See zap.log for more details");
+                    }
+
+                }
+                if (completed)
+                    view.showMessageDialog("The endpoints were successfully generated from source.");
+            }
+        });
+
         optionsButton.addActionListener(new java.awt.event.ActionListener()
         {
             @Override
@@ -295,40 +353,47 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());
+        int x = 0;
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = x++;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(4,4,4,4);
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        buttonPanel.add(importFromSourceButton, gridBagConstraints);
 
-        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-        gridBagConstraints1.gridx = 0;
-        gridBagConstraints1.gridy = 0;
-        gridBagConstraints1.insets = new java.awt.Insets(4,4,4,4);
-        gridBagConstraints1.anchor = GridBagConstraints.WEST;
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = x++;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(4,4,4,4);
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        buttonPanel.add(importFromJsonButton, gridBagConstraints);
 
-        GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-        gridBagConstraints1.gridx = 1;
-        gridBagConstraints1.gridy = 0;
-        gridBagConstraints1.insets = new java.awt.Insets(0,0,0,0);
-        gridBagConstraints1.anchor = GridBagConstraints.WEST;
-        gridBagConstraints2.weightx = 1.0;
-        gridBagConstraints2.weighty= 1.0;
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = x++;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty= 1.0;
+        buttonPanel.add(viewSelectedButton, gridBagConstraints);
 
-        GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-        gridBagConstraints1.gridx = 2;
-        gridBagConstraints1.gridy = 0;
-        gridBagConstraints1.insets = new java.awt.Insets(0,0,0,0);
-        gridBagConstraints1.anchor = GridBagConstraints.WEST;
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = x++;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        buttonPanel.add(optionsButton, gridBagConstraints);
 
-        buttonPanel.add(importButton, gridBagConstraints1);
-        buttonPanel.add(viewSelectedButton, gridBagConstraints2);
-        buttonPanel.add(optionsButton, gridBagConstraints3);
 
-        GridBagConstraints toolConstraints1 = new GridBagConstraints();
-        toolConstraints1.gridx = 0;
-        gridBagConstraints1.gridy = 0;
-        toolConstraints1.insets = new java.awt.Insets(4,4,4,4);
-        toolConstraints1.anchor = GridBagConstraints.WEST;
-        toolConstraints1.weightx = 1.0;
-        toolConstraints1.weighty= 1.0;
+        GridBagConstraints toolConstraints = new GridBagConstraints();
+        toolConstraints.gridx = 0;
+        toolConstraints.gridy = 0;
+        toolConstraints.insets = new java.awt.Insets(4,4,4,4);
+        toolConstraints.anchor = GridBagConstraints.WEST;
+        toolConstraints.weightx = 1.0;
+        toolConstraints.weighty= 1.0;
 
-        panelToolbar.add(buttonPanel, toolConstraints1);
+        panelToolbar.add(buttonPanel, toolConstraints);
 
         return panelToolbar;
     }
@@ -376,7 +441,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         return endpointsTable;
    }
 
-    private EndpointDecorator[] getEndpoints(String sourceFolder)
+    private EndpointDecorator[] getEndpointsFromSource(String sourceFolder)
     {
         if (sourceFolder== null || sourceFolder.trim().isEmpty())
             return  null;
@@ -394,6 +459,34 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         return endpoints;
     }
 
+    private EndpointDecorator[] getEndpointsFromJson(String fileName)
+    {
+        EndpointDecorator[] endpoints = null;
+        try
+        {
+            File file = new File(fileName);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+            String endpointsStr = new String(data, "UTF-8");
+            Endpoint[] endpointList = EndpointSerialization.deserializeAll(endpointsStr);
+            endpoints = new EndpointDecorator[endpointList.length];
+            int i = 0;
+            for(Endpoint endpoint : endpointList)
+                endpoints[i++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint));
+
+        }
+        catch(FileNotFoundException ex)
+        {
+            System.out.println("Unable to open file '" + fileName + "'");
+        }
+        catch(IOException ex)
+        {
+            System.out.println("Error reading file '" + fileName + "'");
+        }
+        return endpoints;
+    }
 
     public void buildNodesFromEndpoints(EndpointDecorator[] endpoints)
     {

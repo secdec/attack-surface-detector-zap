@@ -54,6 +54,8 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
             APP_ID_KEY = "application-id",
             SOURCE_FOLDER_KEY = "source-folder",
             OLD_SOURCE_FOLDER_KEY = "old-source-folder",
+            JSON_FILE_KEY = "json-file",
+            OLD_JSON_FILE_KEY = "old-json-file",
             AUTO_SPIDER_KEY = "auto-spider",
             HOST_KEY = "host",
             PORT_KEY = "port",
@@ -100,6 +102,17 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     {
         String oldSourceFolder = getProperties().getProperty(OLD_SOURCE_FOLDER_KEY);
         return oldSourceFolder;
+    }
+
+    public String getJsonFile()
+    {
+        String jsonFile = getProperties().getProperty(JSON_FILE_KEY);
+        return jsonFile;
+    }
+    public String getOldJsonFile()
+    {
+        String oldJsonFile = getProperties().getProperty(OLD_JSON_FILE_KEY);
+        return oldJsonFile;
     }
 
 
@@ -161,6 +174,20 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     {
         Properties properties = getProperties();
         properties.setProperty(OLD_SOURCE_FOLDER_KEY, oldSourceFolder);
+        saveProperties(properties);
+    }
+
+    public static void setJsonFile(String jsonFile)
+    {
+        Properties properties = getProperties();
+        properties.setProperty(JSON_FILE_KEY, jsonFile);
+        saveProperties(properties);
+    }
+
+    public static void setOldJsonFile(String oldJsonFile)
+    {
+        Properties properties = getProperties();
+        properties.setProperty(OLD_JSON_FILE_KEY, oldJsonFile);
         saveProperties(properties);
     }
 

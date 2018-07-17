@@ -29,6 +29,7 @@ package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 import com.denimgroup.threadfix.data.interfaces.Endpoint;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabase;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabaseFactory;
+import com.denimgroup.threadfix.framework.engine.full.EndpointSerialization;
 import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
@@ -36,18 +37,22 @@ import org.parosproxy.paros.model.Model;
 import org.zaproxy.zap.extension.attacksurfacedetector.EndpointDecorator;
 import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
-public class LocalEndpointsAction extends EndpointsAction {
+public class JsonEndpointAction extends EndpointsAction {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(LocalEndpointsAction.class);
-    public LocalEndpointsAction(final ViewDelegate view, final Model model) {
-        super(view, model, 0);
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(JsonEndpointAction.class);
+    public JsonEndpointAction(final ViewDelegate view, final Model model) {
+        super(view, model, 1);
     }
     @Override
     protected String getMenuItemText() {
-        return "Attack Surface Detector: Import Endpoints from Source";
+        return "Attack Surface Detector: Import Endpoints from CLI JSON";
     }
     @Override
     protected String getNoEndpointsMessage() { return "Failed to retrieve endpoints from the source. Check your inputs."; }
@@ -59,22 +64,31 @@ public class LocalEndpointsAction extends EndpointsAction {
         return LOGGER;
     }
 
-    public EndpointDecorator[] getEndpoints(String sourceFolder)
+    public EndpointDecorator[] getEndpoints(String fileName)
     {
-        getLogger().debug("Got source information, about to generate endpoints.");
-        if (sourceFolder== null || sourceFolder.trim().isEmpty())
-            return  null;
-
-        EndpointDatabase endpointDatabase = EndpointDatabaseFactory.getDatabase(sourceFolder);
         EndpointDecorator[] endpoints = null;
-        if (endpointDatabase != null)
+        try
         {
-            List<Endpoint> endpointList = endpointDatabase.generateEndpoints();
-            endpointList = EndpointUtil.flattenWithVariants(endpointList);
-            endpoints = new EndpointDecorator[endpointList.size()];
+            File file = new File(fileName);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+            String endpointsStr = new String(data, "UTF-8");
+            Endpoint[] endpointList = EndpointSerialization.deserializeAll(endpointsStr);
+            endpoints = new EndpointDecorator[endpointList.length];
             int i = 0;
-            for (Endpoint endpoint : endpointList)
+            for(Endpoint endpoint : endpointList)
                 endpoints[i++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint));
+
+        }
+        catch(FileNotFoundException ex)
+        {
+            System.out.println("Unable to open file '" + fileName + "'");
+        }
+        catch(IOException ex)
+        {
+            System.out.println("Error reading file '" + fileName + "'");
         }
         return endpoints;
     }

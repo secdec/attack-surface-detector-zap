@@ -46,9 +46,11 @@ public abstract class EndpointsAction extends JMenuItem {
 	public static final String GENERIC_INT_SEGMENT = "\\{id\\}";
     private AttackThread attackThread = null;
     Map<String, String> nodes = new HashMap<String, String>();
+    public static int mode;
 
-    public EndpointsAction(final ViewDelegate view, final Model model)
+    public EndpointsAction(final ViewDelegate view, final Model model, int mode)
     {
+        this.mode = mode;
         getLogger().info("Initializing Attack Surface Detector menu item: \"" + getMenuItemText() + "\"");
         setText(getMenuItemText());
         addActionListener(new java.awt.event.ActionListener() {
@@ -56,18 +58,31 @@ public abstract class EndpointsAction extends JMenuItem {
             public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 getLogger().debug("About to show dialog.");
-                boolean configured = OptionsDialog.Validate(view);
+                boolean configured = false;
+                if(mode == 0)
+                    configured = OptionsDialog.ValidateSource(view);
+                else if(mode == 1)
+                    configured = OptionsDialog.ValidateJson(view);
                 boolean completed = false;
                 ZapPropertiesManager.INSTANCE.getViewSelectedButton().setEnabled(false);
                 ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
-
                 if (configured)
                 {
                     try
                     {
-                        EndpointDecorator[] endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                        EndpointDecorator[] endpoints = null;
+                        String oldSourceFolder = null;
+                        if(mode == 0)
+                        {
+                            endpoints  = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                            oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
+                        }
+                        if(mode == 1)
+                        {
+                            endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getJsonFile());
+                            oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldJsonFile();
+                        }
                         EndpointDecorator comparePoints[] = null;
-                        String oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
                         if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
                             comparePoints = getEndpoints(oldSourceFolder);
 
