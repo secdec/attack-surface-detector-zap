@@ -38,16 +38,16 @@ import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
 import java.util.List;
 
-public class LocalEndpointsAction extends EndpointsAction {
+public class LocalEndpointsButton extends EndpointsButton {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = Logger.getLogger(LocalEndpointsAction.class);
-    public LocalEndpointsAction(final ViewDelegate view, final Model model) {
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(LocalEndpointsButton.class);
+    public LocalEndpointsButton(final ViewDelegate view, final Model model) {
         super(view, model, 0);
     }
     @Override
     protected String getMenuItemText() {
-        return "Attack Surface Detector: Import Endpoints from Source";
+        return "Import Endpoints from Source";
     }
     @Override
     protected String getNoEndpointsMessage() { return "Failed to retrieve endpoints from the source. Check your inputs."; }

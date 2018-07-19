@@ -56,7 +56,7 @@ import org.zaproxy.zap.model.Target;
 public class AttackThread extends Thread {
     public enum Progress { NOT_STARTED, SPIDER, ASCAN, FAILED, COMPLETE, STOPPED }
 
-    private EndpointsAction extension;
+    private EndpointsButton extension;
     private URL url;
     private HttpSender httpSender = null;
     private boolean stopAttack = false;
@@ -65,7 +65,7 @@ public class AttackThread extends Thread {
 
     private static final Logger logger = Logger.getLogger(AttackThread.class);
 
-    public AttackThread(EndpointsAction ext,  ViewDelegate view) {
+    public AttackThread(EndpointsButton ext,  ViewDelegate view) {
         this.extension = ext;
         this.view = view;
     }

@@ -42,13 +42,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-public abstract class EndpointsAction extends JMenuItem {
-	public static final String GENERIC_INT_SEGMENT = "\\{id\\}";
+public abstract class EndpointsButton extends JButton {
+    public static final String GENERIC_INT_SEGMENT = "\\{id\\}";
     private AttackThread attackThread = null;
     Map<String, String> nodes = new HashMap<String, String>();
     public static int mode;
 
-    public EndpointsAction(final ViewDelegate view, final Model model, int mode)
+    public EndpointsButton(final ViewDelegate view, final Model model, int mode)
     {
         this.mode = mode;
         getLogger().info("Initializing Attack Surface Detector menu item: \"" + getMenuItemText() + "\"");
@@ -117,7 +117,7 @@ public abstract class EndpointsAction extends JMenuItem {
                 }
                 if (completed)
                 {
-                	view.showMessageDialog(getCompletedMessage());
+                    view.showMessageDialog(getCompletedMessage());
                 }
             }
         });

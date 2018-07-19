@@ -43,22 +43,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-public class JsonEndpointAction extends EndpointsAction {
+public class JsonEndpointsButton extends EndpointsButton {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER = Logger.getLogger(JsonEndpointAction.class);
-    public JsonEndpointAction(final ViewDelegate view, final Model model) {
+    private static final Logger LOGGER = Logger.getLogger(JsonEndpointsButton.class);
+    public JsonEndpointsButton(final ViewDelegate view, final Model model) {
         super(view, model, 1);
     }
     @Override
     protected String getMenuItemText() {
-        return "Attack Surface Detector: Import Endpoints from CLI JSON";
+        return "Import Endpoints from CLI JSON";
     }
     @Override
-    protected String getNoEndpointsMessage() { return "Failed to retrieve endpoints from the source. Check your inputs."; }
+    protected String getNoEndpointsMessage() { return "Failed to retrieve endpoints from JSON. Check your inputs."; }
     @Override
     protected String getCompletedMessage() {
-        return "The endpoints were successfully generated from source.";
+        return "The endpoints were successfully generated from JSON.";
     }
     protected Logger getLogger() {
         return LOGGER;
