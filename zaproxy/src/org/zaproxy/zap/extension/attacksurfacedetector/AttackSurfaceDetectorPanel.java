@@ -142,6 +142,8 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         panelToolbar.setFloatable(false);
         panelToolbar.setRollover(true);
         panelToolbar.setPreferredSize(new java.awt.Dimension(1000,30));
+        panelToolbar.setMinimumSize(new java.awt.Dimension(1000,30));
+        panelToolbar.setMaximumSize(new java.awt.Dimension(1000,30));
         panelToolbar.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
         panelToolbar.setName("Attack Surface Detector");
 
@@ -150,6 +152,8 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         ZapPropertiesManager.INSTANCE.setViewSelectedButton(viewSelectedButton);
         JButton optionsButton = new JButton("Options");
         JButton importFromSourceButton = new JButton("Import Endpoints from Source");
+        //importFromSourceButton.setMinimumSize(new java.awt.Dimension(200,20));
+        //importFromSourceButton.setPreferredSize(new java.awt.Dimension(200,20));
         importFromSourceButton.addActionListener(new java.awt.event.ActionListener()
         {
             @Override
@@ -202,6 +206,8 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         });
 
         JButton importFromJsonButton = new JButton("Import Endpoints from CLI JSON");
+       // importFromJsonButton.setMinimumSize(new java.awt.Dimension(200,20));
+        //importFromJsonButton.setPreferredSize(new java.awt.Dimension(200,20));
         importFromJsonButton.addActionListener(new java.awt.event.ActionListener()
         {
             @Override
@@ -357,14 +363,16 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel{
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = x++;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(4,4,4,4);
+        //gridBagConstraints.insets = new java.awt.Insets(4,4,4,4);
+        gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         buttonPanel.add(importFromSourceButton, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = x++;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(4,4,4,4);
+        //gridBagConstraints.insets = new java.awt.Insets(4,4,4,4);
+        gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         buttonPanel.add(importFromJsonButton, gridBagConstraints);
 
