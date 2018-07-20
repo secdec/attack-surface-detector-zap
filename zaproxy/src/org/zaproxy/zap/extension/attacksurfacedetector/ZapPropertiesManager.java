@@ -73,8 +73,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
 
     private EndpointDecorator decorator;
 
-    private JButton viewSelectedButton;
-
     @Override
     public String getAppId() {
         return getProperties().getProperty(APP_ID_KEY);
@@ -232,14 +230,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         saveProperties(properties);
     }
 
-    public JButton getViewSelectedButton()
-    {
-        return viewSelectedButton;
-    }
-    public void setViewSelectedButton(JButton viewSelectedButton)
-    {
-        this.viewSelectedButton = viewSelectedButton;
-    }
     private static Properties getProperties()
     {
         Properties properties = new Properties();

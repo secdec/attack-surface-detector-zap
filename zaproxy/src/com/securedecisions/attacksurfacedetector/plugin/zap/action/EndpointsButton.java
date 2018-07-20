@@ -64,7 +64,6 @@ public abstract class EndpointsButton extends JButton {
                 else if(mode == 1)
                     configured = OptionsDialog.ValidateJson(view);
                 boolean completed = false;
-                ZapPropertiesManager.INSTANCE.getViewSelectedButton().setEnabled(false);
                 ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
                 if (configured)
                 {

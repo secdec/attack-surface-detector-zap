@@ -85,7 +85,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel {
     private static final long serialVersionUID = 1L;
     private javax.swing.JToolBar panelToolbar = null;
     private ViewDelegate view = null;
-    private JButton viewSelectedButton;
     private Model model;
     private AttackThread attackThread = null;
     Map<String, String> nodes = new HashMap<String, String>();
@@ -146,9 +145,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel {
         panelToolbar.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 12));
         panelToolbar.setName("Attack Surface Detector");
 
-        viewSelectedButton = new JButton("View Selected");
-        viewSelectedButton.setEnabled(false);
-        ZapPropertiesManager.INSTANCE.setViewSelectedButton(viewSelectedButton);
         JButton optionsButton = new JButton("Options");
         JButton importFromSourceButton = new LocalEndpointsButton(view, model);
         JButton importFromJsonButton = new JsonEndpointsButton(view, model);
@@ -157,84 +153,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 boolean shouldContinue = OptionsDialog.show(view);
-            }
-        });
-        viewSelectedButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                JPanel detailPanel = new JPanel();
-                detailPanel.setLayout(new GridBagLayout());
-                JLabel displayArea = new JLabel();
-                String displayStr = new String();
-                int y = 0;
-                GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-                gridBagConstraints1.gridx = 0;
-                gridBagConstraints1.gridy = y++;
-                gridBagConstraints1.weightx = 1.0D;
-                gridBagConstraints1.insets = new java.awt.Insets(4, 4, 4, 4);
-                gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTHWEST;
-                EndpointDecorator decorator = ZapPropertiesManager.INSTANCE.getEndpointDecorator();
-                Endpoint.Info endpoint = decorator.getEndpoint();
-
-                if (endpoint != null) {
-
-                    if (decorator.getStatus() == EndpointDecorator.Status.NEW) {
-                        displayStr = "<html><b>New Endpoint</b><br>";
-                        displayStr = displayStr + "URL:<br>";
-                    } else
-                        displayStr = displayStr + "<html> URL:<br>";
-
-                    displayStr = displayStr + "" + endpoint.getUrlPath() + "<br><br>Methods:<br>";
-                    // TODO - Gather all Endpoint objects pointing to the same endpoint and output their HTTP methods (Endpoints only have
-                    //  one HTTP method at a time now)
-                    if (endpoint.getHttpMethod().length() > 4)
-                        displayStr = displayStr + endpoint.getHttpMethod().substring(14);
-                    else
-                        displayStr = displayStr + endpoint.getHttpMethod();
-
-
-                    displayStr = displayStr + "<br>Parameters and type:<br>";
-                    if (decorator.getStatus() == EndpointDecorator.Status.CHANGED) {
-                        for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet()) {
-                            boolean found = false;
-                            for (Map.Entry<String, RouteParameter> compParameter : decorator.getComparePoint().getParameters().entrySet()) {
-                                if (parameter.getKey().equalsIgnoreCase(compParameter.getKey())) {
-                                    found = true;
-                                    if (!parameter.getValue().getDataType().getDisplayName().equals(compParameter.getValue().getDataType().getDisplayName()))
-                                        displayStr = displayStr + "<strong>" + parameter.getKey() + " - " + compParameter.getValue().getDataType().getDisplayName().toUpperCase() + " -> " + parameter.getValue().getDataType().getDisplayName().toUpperCase() + "</strong> (modified parameter type) <br>";
-                                    else
-                                        displayStr = displayStr + parameter.getKey() + " - " + parameter.getValue().getDataType().getDisplayName() + "<br>";
-                                    break;
-                                }
-                            }
-                            if (!found)
-                                displayStr = displayStr + "<strong>" + parameter.getKey() + "</strong> - <strong>" + parameter.getValue().getDataType().getDisplayName().toUpperCase() + "</strong> (added parameter)<br>";
-                        }
-                        for (Map.Entry<String, RouteParameter> compParameter : decorator.getComparePoint().getParameters().entrySet()) {
-                            boolean found = false;
-                            for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet()) {
-                                if (parameter.getKey().equalsIgnoreCase(compParameter.getKey())) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (!found)
-                                displayStr = displayStr + "<span style='text-decoration: line-through;'>" + compParameter.getKey() + " - " + compParameter.getValue().getDataType().getDisplayName().toUpperCase() + "</span> (removed parameter)<br>";
-                        }
-                    } else {
-                        for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet()) {
-                            displayStr = displayStr + parameter.getKey() + " - " + parameter.getValue().getDataType().getDisplayName() + "<br>";
-                        }
-                    }
-
-                    displayStr = displayStr + "</html>";
-                    displayArea.setText(displayStr);
-                    detailPanel.add(displayArea, gridBagConstraints1);
-                } else
-                    detailPanel.add(new JLabel("No Endpoint Selected"));
-
-                JOptionPane.showMessageDialog(view.getMainFrame(), detailPanel, "Endpoint Details", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -255,15 +173,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         buttonPanel.add(importFromJsonButton, gridBagConstraints);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = x++;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 0);
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        buttonPanel.add(viewSelectedButton, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = x++;
@@ -301,8 +210,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     EndpointDecorator decorator = (EndpointDecorator) endpointsTable.getModel().getValueAt(endpointsTable.getSelectedRow(), 5);
-                    if (!viewSelectedButton.isEnabled())
-                        viewSelectedButton.setEnabled(true);
                     ZapPropertiesManager.INSTANCE.setEndpointDecorator(decorator);
 
                     JPanel detailPanel = new JPanel();
@@ -378,8 +285,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel {
                     JOptionPane.showMessageDialog(view.getMainFrame(), detailPanel, "Endpoint Details", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     EndpointDecorator decorator = (EndpointDecorator) endpointsTable.getModel().getValueAt(endpointsTable.getSelectedRow(), 5);
-                    if (!viewSelectedButton.isEnabled())
-                        viewSelectedButton.setEnabled(true);
                     ZapPropertiesManager.INSTANCE.setEndpointDecorator(decorator);
                 }
             }
