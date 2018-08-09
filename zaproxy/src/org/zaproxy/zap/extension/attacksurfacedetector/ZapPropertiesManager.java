@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.parosproxy.paros.Constant;
+import org.parosproxy.paros.extension.ViewDelegate;
 
 import javax.swing.*;
 
@@ -46,8 +47,10 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
 
     private static final Logger logger = Logger.getLogger(ZapPropertiesManager.class);
     public static final ZapPropertiesManager INSTANCE = new ZapPropertiesManager();
+    private static boolean hasChanges = false;
+    private ViewDelegate view = null;
     private ZapPropertiesManager(){}
-    private static final String
+    public static final String
             FILE_NAME = "asd.properties",
             API_KEY_KEY = "key",
             URL_KEY = "url",
@@ -69,6 +72,14 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         return key;
     }
 
+    public void setPropertyValue(String key, String value) {
+        JOptionPane.showMessageDialog(view.getMainFrame(), "Key = " + key + " value = " + value);
+        Properties properties = getProperties();
+        properties.setProperty(key, value);
+        saveProperties(properties);
+        hasChanges = true;
+    }
+
     private static JTable endpointsTable;
 
     private EndpointDecorator decorator;
@@ -87,6 +98,14 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         this.decorator = decorator;
     }
 
+    public ViewDelegate getView() {
+        return view;
+    }
+
+    public void setView(ViewDelegate view)
+    {
+        this.view = view;
+    }
     public void setEndpointsTable(JTable table){endpointsTable = table;}
 
     public static JTable getEndpointsTable() {return endpointsTable;}
