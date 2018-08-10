@@ -73,7 +73,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     }
 
     public void setPropertyValue(String key, String value) {
-        JOptionPane.showMessageDialog(view.getMainFrame(), "Key = " + key + " value = " + value);
         Properties properties = getProperties();
         properties.setProperty(key, value);
         saveProperties(properties);
