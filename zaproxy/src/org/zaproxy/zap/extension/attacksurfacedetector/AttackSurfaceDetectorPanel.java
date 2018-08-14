@@ -123,7 +123,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
         basePanel.addTab("Results", null, buildMainPanel(), "The results tab of the Attack Surface Detector which contains buttons to import endpoints and a table to view these endpoints");
         basePanel.addTab("Help", null, buildHelpPanel(), "The information tab of the Attack Surface Detector which provides the user with useful information regarding supported formats and general usage");
 
-        this.add(basePanel, BorderLayout.PAGE_START);
+        this.add(basePanel, BorderLayout.CENTER);
     }
 
 
@@ -139,7 +139,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         mainPanel.add(buttonPanel, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
@@ -147,8 +147,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1;
         gridBagConstraints.weighty = 1;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollPane, gridBagConstraints);
 
@@ -270,25 +269,11 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
         fileFormatConstraints.anchor = GridBagConstraints.NORTHWEST;
         helpPanel.add(fileFormatPanel, fileFormatConstraints);
 
-        JPanel bufferPanel = new JPanel();
-        bufferPanel.setPreferredSize(new Dimension(1000,500));
-        GridBagConstraints bufferPanelConstraints = new GridBagConstraints();
-        bufferPanelConstraints.gridx = 0;
-        bufferPanelConstraints.gridy = y++;
-        bufferPanelConstraints.ipadx = 5;
-        bufferPanelConstraints.ipady = 5;
-        bufferPanelConstraints.insets = helpPanelInsets;
-        bufferPanelConstraints.weightx = 1.0;
-        bufferPanelConstraints.weighty = 1.0;
-        bufferPanelConstraints.anchor = GridBagConstraints.NORTHWEST;
-        helpPanel.add(bufferPanel, bufferPanelConstraints);
-
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 1;
         gridBagConstraints.weighty = 1;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         helpScroll.setPreferredSize(new Dimension(view.getMainFrame().getWidth(), view.getMainFrame().getHeight()-view.getResponsePanel().getHeight() + 100));
@@ -388,19 +373,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
         targetPanelConstraints.insets = optionsPanelInsets;
         targetPanelConstraints.anchor = GridBagConstraints.NORTHWEST;
         optionsPanel.add(targetPanel, targetPanelConstraints);
-
-        JPanel bufferPanel = new JPanel();
-        bufferPanel.setPreferredSize(new Dimension(1000,500));
-        GridBagConstraints bufferPanelConstraints = new GridBagConstraints();
-        bufferPanelConstraints.gridx = 0;
-        bufferPanelConstraints.gridy = y++;
-        bufferPanelConstraints.ipadx = 5;
-        bufferPanelConstraints.ipady = 5;
-        bufferPanelConstraints.insets = optionsPanelInsets;
-        bufferPanelConstraints.weightx = 1.0;
-        bufferPanelConstraints.weighty = 1.0;
-        bufferPanelConstraints.anchor = GridBagConstraints.NORTHWEST;
-        optionsPanel.add(bufferPanel, bufferPanelConstraints);
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
