@@ -449,7 +449,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
         });
 
         final JLabel importLabel = addPanelDescriptionToGridBagLayout("<html><li> Selecting \"Import Endpoints from Source\" or \"Import Endpoints from CLI JSON\" without" +
-                        " configuring targer and/or source/JSON location respectively will show a configuration dialog prompting the user to do so</li><br>" +
+                        " configuring target and/or source/JSON location respectively will show a configuration dialog prompting the user to do so</li><br>" +
                         "<li> To import endpoints in order to view their details without attacking the webapplication simply leave the target configuration empty and select submit on the pop up dialog</li><br>" +
                         "<li> To view the details of a specific endpoint simply double click on an endpoint listed in the endpoints table of the results screen</li><br></html>",
                 generalHelpPanel, yPosition++);
