@@ -108,7 +108,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
         super.setName("Attack Surface Detector");
         this.model = model;
         this.view = view;
-        ZapPropertiesManager.INSTANCE.setView(view);
         initialize();
         ImageIcon SECDEC_ICON = new ImageIcon(AttackSurfaceDetector.class.getResource("/org/zaproxy/zap/extension/attacksurfacedetector/resources/ASD-16px-logo.png"));
         this.setIcon(SECDEC_ICON);
@@ -784,7 +783,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
                 if (e.getClickCount() == 2)
                 {
                     EndpointDecorator decorator = (EndpointDecorator) endpointsTable.getModel().getValueAt(endpointsTable.getSelectedRow(), 5);
-                    ZapPropertiesManager.INSTANCE.setEndpointDecorator(decorator);
 
                     JPanel detailPanel = new JPanel();
                     detailPanel.setLayout(new GridBagLayout());
@@ -868,7 +866,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
                 else
                 {
                     EndpointDecorator decorator = (EndpointDecorator) endpointsTable.getModel().getValueAt(endpointsTable.getSelectedRow(), 5);
-                    ZapPropertiesManager.INSTANCE.setEndpointDecorator(decorator);
                 }
             }
 
@@ -913,11 +910,6 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
     private JTextField addTextFieldToGridBagLayout(String labelText, Container gridBagContainer, int yPosition, String propertyKey)
     {
         return addTextFieldToGridBagLayout(labelText, gridBagContainer, yPosition, propertyKey, null, null);
-    }
-
-    private JTextField addTextFieldToGridBagLayout(String labelText, Container gridBagContainer, int yPosition, String propertyKey, Runnable threadFixPropertyFieldListenerRunnable)
-    {
-        return addTextFieldToGridBagLayout(labelText, gridBagContainer, yPosition, propertyKey, threadFixPropertyFieldListenerRunnable, null);
     }
 
     private JTextField addTextFieldToGridBagLayout(String labelText, Container gridBagContainer, int yPosition, String propertyKey, JButton button)

@@ -357,12 +357,6 @@ public class OptionsDialog {
         textBoxConstraints.gridy = y;
         textBoxConstraints.anchor = GridBagConstraints.WEST;
 
-        browseButtonConstraints = new GridBagConstraints();
-        browseButtonConstraints.gridwidth = 1;
-        browseButtonConstraints.gridx = 5;
-        browseButtonConstraints.gridy = y++;
-        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
-
         myPanel.add(portLabel, labelConstraints);
         myPanel.add(portField, textBoxConstraints);
 
@@ -377,12 +371,6 @@ public class OptionsDialog {
         textBoxConstraints.gridx = 1;
         textBoxConstraints.gridy = y;
         textBoxConstraints.anchor = GridBagConstraints.WEST;
-
-        browseButtonConstraints = new GridBagConstraints();
-        browseButtonConstraints.gridwidth = 1;
-        browseButtonConstraints.gridx = 5;
-        browseButtonConstraints.gridy = y++;
-        browseButtonConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         myPanel.add(pathLabel, labelConstraints);
         myPanel.add(pathField, textBoxConstraints);

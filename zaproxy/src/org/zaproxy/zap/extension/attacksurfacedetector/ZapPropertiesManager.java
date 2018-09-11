@@ -48,7 +48,6 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
     private static final Logger logger = Logger.getLogger(ZapPropertiesManager.class);
     public static final ZapPropertiesManager INSTANCE = new ZapPropertiesManager();
     private static boolean hasChanges = false;
-    private ViewDelegate view = null;
     private ZapPropertiesManager(){}
     public static final String
             FILE_NAME = "asd.properties",
@@ -81,30 +80,12 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
 
     private static JTable endpointsTable;
 
-    private EndpointDecorator decorator;
 
     @Override
     public String getAppId() {
         return getProperties().getProperty(APP_ID_KEY);
     }
 
-    public EndpointDecorator getEndpointDecorator() {
-        return decorator;
-    }
-
-    public void setEndpointDecorator(EndpointDecorator decorator)
-    {
-        this.decorator = decorator;
-    }
-
-    public ViewDelegate getView() {
-        return view;
-    }
-
-    public void setView(ViewDelegate view)
-    {
-        this.view = view;
-    }
     public void setEndpointsTable(JTable table){endpointsTable = table;}
 
     public static JTable getEndpointsTable() {return endpointsTable;}
@@ -287,9 +268,9 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
             return null;
 
         if (path == null || path.trim().isEmpty())
-             return proto + host + ":" + port;
+             return (proto + host + ":" + port).replaceAll("[\r\n]","");
         else
-            return proto + host + ":" + port + "/" + path;
+            return (proto + host + ":" + port + "/" + path).replaceAll("[\r\n]","");
     }
     private static void saveProperties(Properties properties)
     {
@@ -299,7 +280,7 @@ public class ZapPropertiesManager extends AbstractZapPropertiesManager {
         }
         catch (IOException e)
         {
-            logger.warn(e.getMessage(), e);
+            logger.warn(e.getMessage().replaceAll("[\r\n]",""), e);
         }
     }
 }

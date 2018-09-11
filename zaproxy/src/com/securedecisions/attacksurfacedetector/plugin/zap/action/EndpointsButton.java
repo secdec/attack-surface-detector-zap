@@ -46,12 +46,12 @@ public abstract class EndpointsButton extends JButton {
     public static final String GENERIC_INT_SEGMENT = "\\{id\\}";
     private AttackThread attackThread = null;
     Map<String, String> nodes = new HashMap<String, String>();
-    public static int mode;
+    public int mode;
 
     public EndpointsButton(final ViewDelegate view, final Model model, int mode)
     {
         this.mode = mode;
-        getLogger().info("Initializing Attack Surface Detector menu item: \"" + getMenuItemText() + "\"");
+        getLogger().info("Initializing Attack Surface Detector menu item: \"" + getMenuItemText().replaceAll("[\r\n]","") + "\"");
         setText(getMenuItemText());
         addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -64,7 +64,6 @@ public abstract class EndpointsButton extends JButton {
                 else if(mode == 1)
                     configured = OptionsDialog.ValidateJson(view);
                 boolean completed = false;
-                ZapPropertiesManager.INSTANCE.setEndpointDecorator(null);
                 if (configured)
                 {
                     try
@@ -110,7 +109,7 @@ public abstract class EndpointsButton extends JButton {
                     }
                     catch (Exception ex)
                     {
-                        getLogger().debug(ex.getStackTrace());
+                        getLogger().debug(Arrays.toString(ex.getStackTrace()).replaceAll("[\r\n]",""));
                         JOptionPane.showMessageDialog(view.getMainFrame(), "An error occurred processing input. See zap.log for more details");
                     }
                 }
@@ -128,44 +127,64 @@ public abstract class EndpointsButton extends JButton {
         {
             Endpoint.Info endpoint = decorator.getEndpoint();
             String endpointPath = endpoint.getUrlPath();
-            if (endpointPath.startsWith("/"))
+            if (endpointPath.charAt(0) == '\\')
                 endpointPath = endpointPath.substring(1);
             endpointPath = endpointPath.replaceAll(GENERIC_INT_SEGMENT, "1");
             boolean first = true;
-            String reqString = endpointPath;
+            StringBuffer reqStringBuff = new StringBuffer(endpointPath);
             String method = endpoint.getHttpMethod();
             for (Map.Entry<String, RouteParameter> parameter : endpoint.getParameters().entrySet())
             {
                 if (first)
                 {
                     first = false;
-                    reqString = reqString + "?";
+                    if (parameter.getValue().getDataType() == ParameterDataType.STRING)
+                        reqStringBuff.append('?' + parameter.getKey() + "= debug");
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.INTEGER)
+                        reqStringBuff.append('?' + parameter.getKey() + "= -1");
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.BOOLEAN)
+                        reqStringBuff.append('?' + parameter.getKey() + "= true");
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.DECIMAL)
+                        reqStringBuff.append('?' + parameter.getKey() + "= .1");
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.DATE_TIME)
+                        reqStringBuff.append('?' + parameter.getKey() + '='+ new Date());
+
+                    else if (parameter.getValue().getDataType() == ParameterDataType.LOCAL_DATE)
+                        reqStringBuff.append('?' + parameter.getKey() + '=' + new Date());
+
+                    else
+                        reqStringBuff.append('?' + parameter.getKey() + "=default");
                 }
                 else
-                    reqString = reqString + "&";
+                {
+                    if (parameter.getValue().getDataType() == ParameterDataType.STRING)
+                        reqStringBuff.append('&' + parameter.getKey() + "= debug");
 
-                if (parameter.getValue().getDataType() == ParameterDataType.STRING)
-                    reqString = reqString + parameter.getKey() + "="+"debug";
+                    else if (parameter.getValue().getDataType() == ParameterDataType.INTEGER)
+                        reqStringBuff.append('&' + parameter.getKey() + "= -1");
 
-                else if (parameter.getValue().getDataType() == ParameterDataType.INTEGER)
-                    reqString = reqString + parameter.getKey() + "="+"-1";
+                    else if (parameter.getValue().getDataType() == ParameterDataType.BOOLEAN)
+                        reqStringBuff.append('&' + parameter.getKey() + "= true");
 
-                else if (parameter.getValue().getDataType() == ParameterDataType.BOOLEAN)
-                    reqString = reqString + parameter.getKey() + "="+"true";
+                    else if (parameter.getValue().getDataType() == ParameterDataType.DECIMAL)
+                        reqStringBuff.append('&' + parameter.getKey() + "= .1");
 
-                else if (parameter.getValue().getDataType() == ParameterDataType.DECIMAL)
-                    reqString = reqString + parameter.getKey() + "="+".1";
+                    else if (parameter.getValue().getDataType() == ParameterDataType.DATE_TIME)
+                        reqStringBuff.append('&' + parameter.getKey() + '=' + new Date());
 
-                else if (parameter.getValue().getDataType() == ParameterDataType.DATE_TIME)
-                    reqString = reqString + parameter.getKey() + "="+ new Date();
+                    else if (parameter.getValue().getDataType() == ParameterDataType.LOCAL_DATE)
+                        reqStringBuff.append('&' + parameter.getKey() + '=' + new Date());
 
-                else if (parameter.getValue().getDataType() == ParameterDataType.LOCAL_DATE)
-                    reqString = reqString + parameter.getKey() + "="+new Date();
-
-                else
-                    reqString = reqString + parameter.getKey() + "=default";
+                    else
+                        reqStringBuff.append('&' + parameter.getKey() + "=default");
+                }
 
             }
+            String reqString = reqStringBuff.toString();
             reqString = reqString.replace("{", "");
             reqString = reqString.replace("}", "");
             reqString = reqString.replace(" ", "");
@@ -215,7 +234,7 @@ public abstract class EndpointsButton extends JButton {
             boolean hasGet = false;
             boolean hasPost = false;
             String method = endpoint.getHttpMethod();
-            if(method.toString().equalsIgnoreCase("post"))
+            if(method.equalsIgnoreCase("post"))
                 hasPost = true;
             else if (method.toString().equalsIgnoreCase("get"))
                 hasGet = true;
@@ -262,7 +281,7 @@ public abstract class EndpointsButton extends JButton {
 
     public void notifyProgress(AttackThread.Progress progress)
     {
-        getLogger().info("Status is " + progress);
+        getLogger().info("Status is " + progress.toString().replaceAll("[\r\n]",""));
     }
 
     protected abstract String getMenuItemText();
