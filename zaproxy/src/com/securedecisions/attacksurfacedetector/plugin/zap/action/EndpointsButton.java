@@ -72,20 +72,20 @@ public abstract class EndpointsButton extends JButton {
                         String oldSourceFolder = null;
                         if(mode == 0)
                         {
-                            endpoints  = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder());
+                            endpoints  = getEndpoints(ZapPropertiesManager.INSTANCE.getSourceFolder(), false);
                             oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldSourceFolder();
                         }
                         if(mode == 1)
                         {
-                            endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getJsonFile());
+                            endpoints = getEndpoints(ZapPropertiesManager.INSTANCE.getJsonFile(), false);
                             oldSourceFolder = ZapPropertiesManager.INSTANCE.getOldJsonFile();
                         }
                         EndpointDecorator comparePoints[] = null;
                         if(oldSourceFolder != null && !oldSourceFolder.isEmpty())
-                            comparePoints = getEndpoints(oldSourceFolder);
+                            comparePoints = getEndpoints(oldSourceFolder, true);
 
                         if ((endpoints == null) || (endpoints.length == 0))
-                            view.showWarningDialog(getNoEndpointsMessage());
+                            view.showWarningDialog(getErrorMessage());
                         else
                         {
                             if (comparePoints != null && comparePoints.length !=0)
@@ -110,7 +110,7 @@ public abstract class EndpointsButton extends JButton {
                     catch (Exception ex)
                     {
                         getLogger().debug(Arrays.toString(ex.getStackTrace()).replaceAll("[\r\n]",""));
-                        JOptionPane.showMessageDialog(view.getMainFrame(), "An error occurred processing input. See zap.log for more details");
+                        view.showWarningDialog(getErrorMessage());
                     }
                 }
                 if (completed)
@@ -287,8 +287,9 @@ public abstract class EndpointsButton extends JButton {
     protected abstract String getMenuItemText();
     protected abstract String getNoEndpointsMessage();
     protected abstract String getCompletedMessage();
+    protected abstract String getErrorMessage();
     protected abstract Logger getLogger();
-    public abstract EndpointDecorator[] getEndpoints(String sourceFolder);
+    public abstract EndpointDecorator[] getEndpoints(String sourceFolder, boolean comparison);
 
 
 }

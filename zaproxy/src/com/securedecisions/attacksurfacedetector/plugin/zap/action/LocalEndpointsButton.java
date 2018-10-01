@@ -40,6 +40,7 @@ import java.util.List;
 
 public class LocalEndpointsButton extends EndpointsButton {
 
+    private String errorMessage = "An error occurred processing input. Please check input";
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(LocalEndpointsButton.class);
     public LocalEndpointsButton(final ViewDelegate view, final Model model) {
@@ -55,11 +56,13 @@ public class LocalEndpointsButton extends EndpointsButton {
     protected String getCompletedMessage() {
         return "The endpoints were successfully generated from source.";
     }
+    @Override
+    protected  String getErrorMessage() {return errorMessage;}
     protected Logger getLogger() {
         return LOGGER;
     }
 
-    public EndpointDecorator[] getEndpoints(String sourceFolder)
+    public EndpointDecorator[] getEndpoints(String sourceFolder, boolean comparison)
     {
         getLogger().debug("Got source information, about to generate endpoints.");
         if (sourceFolder== null || sourceFolder.trim().isEmpty())
@@ -74,7 +77,7 @@ public class LocalEndpointsButton extends EndpointsButton {
             endpoints = new EndpointDecorator[endpointList.size()];
             int i = 0;
             for (Endpoint endpoint : endpointList)
-                endpoints[i++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint));
+                endpoints[i++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint, false));
         }
         return endpoints;
     }
