@@ -33,7 +33,6 @@ import com.denimgroup.threadfix.framework.engine.full.EndpointDatabaseFactory;
 import com.denimgroup.threadfix.framework.engine.full.EndpointSerialization;
 import com.denimgroup.threadfix.framework.engine.full.RouteParameterDeserializer;
 import com.denimgroup.threadfix.framework.util.EndpointUtil;
-import jdk.nashorn.internal.scripts.JO;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.annotate.JsonAutoDetect;

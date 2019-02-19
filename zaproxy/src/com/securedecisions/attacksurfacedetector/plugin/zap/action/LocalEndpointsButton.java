@@ -26,9 +26,12 @@
 
 package com.securedecisions.attacksurfacedetector.plugin.zap.action;
 
+import com.denimgroup.threadfix.data.enums.FrameworkType;
 import com.denimgroup.threadfix.data.interfaces.Endpoint;
+import com.denimgroup.threadfix.framework.engine.framework.FrameworkCalculator;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabase;
 import com.denimgroup.threadfix.framework.engine.full.EndpointDatabaseFactory;
+import com.denimgroup.threadfix.framework.engine.full.TemporaryExtractionLocation;
 import com.denimgroup.threadfix.framework.util.EndpointUtil;
 import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.ViewDelegate;
@@ -36,6 +39,8 @@ import org.parosproxy.paros.model.Model;
 import org.zaproxy.zap.extension.attacksurfacedetector.EndpointDecorator;
 import org.zaproxy.zap.extension.attacksurfacedetector.ZapPropertiesManager;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocalEndpointsButton extends EndpointsButton {
@@ -65,19 +70,41 @@ public class LocalEndpointsButton extends EndpointsButton {
     public EndpointDecorator[] getEndpoints(String sourceFolder, boolean comparison)
     {
         getLogger().debug("Got source information, about to generate endpoints.");
-        if (sourceFolder== null || sourceFolder.trim().isEmpty())
-            return  null;
+        File file= new File(sourceFolder);
+        TemporaryExtractionLocation zipExtractor = null;
+        if (TemporaryExtractionLocation.isArchive(sourceFolder)) {
+            zipExtractor = new TemporaryExtractionLocation(sourceFolder);
+            zipExtractor.extract();
 
-        EndpointDatabase endpointDatabase = EndpointDatabaseFactory.getDatabase(sourceFolder);
+            file = zipExtractor.getOutputPath();
+        }
+
+        List<FrameworkType> frameworks = FrameworkCalculator.getTypes(file);
+        ArrayList<List<Endpoint>> endpointsListList =new ArrayList<>(frameworks.size());
         EndpointDecorator[] endpoints = null;
-        if (endpointDatabase != null)
+        int decSize = 0;
+        for (FrameworkType framework :  frameworks)
         {
-            List<Endpoint> endpointList = endpointDatabase.generateEndpoints();
-            endpointList = EndpointUtil.flattenWithVariants(endpointList);
-            endpoints = new EndpointDecorator[endpointList.size()];
-            int i = 0;
-            for (Endpoint endpoint : endpointList)
-                endpoints[i++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint, false));
+            EndpointDatabase endpointDatabase = EndpointDatabaseFactory.getDatabase(file, framework);
+            if(endpointDatabase != null)
+            {
+                List<Endpoint> endpointsList = EndpointUtil.flattenWithVariants(endpointDatabase.generateEndpoints());
+                endpointsListList.add(endpointsList);
+                decSize += endpointsList.size();
+            }
+        }
+        endpoints = new EndpointDecorator[decSize];
+        int pos = 0;
+        for(List<Endpoint> endpointList: endpointsListList)
+        {
+            for(Endpoint endpoint : endpointList)
+            {
+                endpoints[pos++] = new EndpointDecorator(Endpoint.Info.fromEndpoint(endpoint, false));
+            }
+        }
+
+        if (zipExtractor != null) {
+            zipExtractor.release();
         }
         return endpoints;
     }
