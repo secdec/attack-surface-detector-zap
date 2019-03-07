@@ -1,11 +1,16 @@
 <zapaddon>
     <name>Attack Surface Detector</name>
-    <version>1.1.2</version>
-    <status>alpha</status>
+    <version>${zap.addon.version}</version>
+    <status>${zap.addon.status}</status>
     <description>The Attack Surface Detector analyzes web application source code to generate endpoints that can be used for penetration testing.</description>
     <author>Secure Decisions (Matthew DeLetto)</author>
-    <url></url>
-    <changes>First Version</changes>
+    <url>https://github.com/secdec/attack-surface-detector-zap/wiki</url>
+    <changes>
+        <![CDATA[
+        Various incremental changes (see https://github.com/secdec/attack-surface-detector-zap/releases)<br>
+        Fix un-handled exception when target unavailable & address various "house keeping" tasks.<br>
+        ]]>
+    </changes>
     <extensions>
         <extension>org.zaproxy.zap.extension.attacksurfacedetector.AttackSurfaceDetector</extension>
     </extensions>
@@ -13,6 +18,6 @@
     <pscanrules/>
     <filters/>
     <files></files>
-    <not-before-version>2.7.0</not-before-version>
+    <not-before-version>${zap.addon.not-before-version}</not-before-version>
     <not-from-version></not-from-version>
 </zapaddon>
