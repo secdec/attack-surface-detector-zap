@@ -16,7 +16,6 @@
     </extensions>
     <ascanrules/>
     <pscanrules/>
-    <filters/>
     <files></files>
     <not-before-version>${zap.addon.not-before-version}</not-before-version>
     <not-from-version></not-from-version>
