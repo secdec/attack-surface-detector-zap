@@ -70,6 +70,7 @@ import org.apache.log4j.Logger;
 import org.parosproxy.paros.extension.AbstractPanel;
 import org.parosproxy.paros.extension.ViewDelegate;
 import org.parosproxy.paros.model.Model;
+import org.zaproxy.zap.utils.ZapHtmlLabel;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -786,7 +787,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
 
                     JPanel detailPanel = new JPanel();
                     detailPanel.setLayout(new GridBagLayout());
-                    JLabel displayArea = new JLabel();
+                    JLabel displayArea = new ZapHtmlLabel();
                     String displayStr = new String();
                     int y = 0;
                     GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -984,7 +985,7 @@ public class AttackSurfaceDetectorPanel extends AbstractPanel
 
     private JLabel addPanelDescriptionToGridBagLayout(String descriptionText, Container gridBagContainer, int yPosition)
     {
-        final JLabel panelDescription = new JLabel(descriptionText);
+        final JLabel panelDescription = new ZapHtmlLabel(descriptionText);
         panelDescription.setHorizontalAlignment(SwingConstants.LEFT);
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = 3;
