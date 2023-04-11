@@ -8,7 +8,7 @@
     <changes>
         <![CDATA[
         Various incremental changes (see https://github.com/secdec/attack-surface-detector-zap/releases)<br>
-        Fix un-handled exception when target unavailable & address various "house keeping" tasks.<br>
+        Properly display HTML content in GUI.<br>
         ]]>
     </changes>
     <extensions>
